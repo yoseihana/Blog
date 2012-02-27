@@ -1,6 +1,6 @@
 <div class="contenu">
     <h1>
-        L'auteure
+        L'auteur
     </h1>
 
     <p>
