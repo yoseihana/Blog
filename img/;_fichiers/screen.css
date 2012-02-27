@@ -1,0 +1,150 @@
+/************************************************
+/* RESTE MEYER
+************************************************/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-weight: inherit;
+    font-style: inherit;
+    font-size: 100%;
+    font-family: inherit;
+    vertical-align: baseline;
+}
+
+/* remember to define focus styles! */
+:focus {
+    outline: 0;
+}
+
+body {
+    line-height: 1;
+    color: black;
+    background: white;
+}
+
+ol, ul {
+    list-style: none;
+}
+
+/* tables still need 'cellspacing="0"' in the markup */
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+caption, th, td {
+    text-align: left;
+    font-weight: normal;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: "";
+}
+
+blockquote, q {
+    quotes: "" "";
+}
+
+/************************************************
+/* FIN RESTE MEYER
+************************************************/
+body {
+    background-image: url(./img/bg-pink.png);
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    color: black;
+}
+
+div.main {
+    margin: 0 auto;
+    width: 90%;
+    margin-top: 2em;
+}
+
+div#header {
+    position: relative;
+    clear: both;
+}
+
+div#header h1 {
+    float: left;
+    width: 65%;
+    font-size: 2em;
+    font-weight: bold;
+    font-family: Gill sans;
+    color: white;
+}
+
+div#header ul {
+    color: white;
+
+}
+
+div#header ul li {
+    float: left;
+    background-color: pink;
+    font-size: 2em;
+    font-weight: bold;
+
+}
+
+div.content {
+    position: relative;
+    margin-top: 2em;
+    background-color: white;
+}
+
+div.content div.colonneGauche {
+    float: left;
+    width: 60%;
+    background-image: url(./img/bg-pink.png);
+}
+
+div.content div.colonneGauche .article {
+    border: 3px dashed white;
+    margin-top: 2em;
+    padding: 1em;
+}
+
+.article h1 {
+    font-family: cursive;
+    color: #BA1155;
+    font-size: 1.5em;
+    margin: 1em;
+}
+
+.article p {
+    color: #9CA1A6;
+}
+
+div.content div.colonneDroite {
+    width: 30%;
+    float: right;
+}
+
+div.content div.colonneDroite .contenu {
+    border: 3px dashed white;
+    margin-top: 2em;
+    padding: 1em;
+}
+
+.contenu h1 {
+    font-family: cursive;
+    color: #BA1155;
+    font-size: 1.5em;
+    margin: 1em;
+}
+
+.contenu p {
+    color: #9CA1A6;
+}
