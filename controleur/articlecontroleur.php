@@ -1,70 +1,66 @@
 <?php
 
-include 'modeles/' . $c . '.php';
+include 'modeles/article.php';
+include 'modeles/commentaire.php';
 
 function lister()
 {
     global $a, $c;
 
     $data['view_title'] = 'Liste des articles';
-    $data['articles'] = getList();
+    $data['articles'] = getAllArticles();
+
     $html = $a . $c . '.php';
     return array('data' => $data, 'html' => $html);
 }
 
 function modifier()
 {
-    global $a, $c, $validActions, $validEntities;
+    global $a, $c;
 
-    if (isset($_REQUEST['id_article'])) {
-        $id_article = $_REQUEST['id_article'];
-        if (!_idArticleExiste($id_article)) {
-            die('l\'id article fournit n\'existe pas dans la base de donnée!');
-            //header('Location:index.php?c=error&a=e_404');
-        }
-    }
-    else
+    $id_article = _getIdarticleFromRequest();
+    _testIdarticle($id_article);
+
+    if ($_SERVER['REQUEST_METHOD'] == 'POST')
     {
-        die('vous devez fournir un id article pour voir l\'article');
-        //header('Location:index.php?c=error&a=e_404');
-    }
+        $champs['article']['id_article'] = $id_article;
+        $champs['article']['titre'] = $_POST['titre'];
+        $champs['article']['article'] = $_POST['article'];
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $champsArticle['titre'] = $_POST['titre'];
-        $champsArticle['article'] = $_POST['article'];
-        $champsArticle['id_article'] = $id_article;
+        updateArticle($champs);
 
-        update($champsArticle);
-
-        header('Location:' . $_SERVER['PHP_SELF'] . '?a=' . $validActions['voir'] . '&c=' . $validEntities['article'] . '&id_article=' . $id_article);
+        header('Location:' . voirArticleUrl($id_article));
     }
     elseif ($_SERVER['REQUEST_METHOD'] == 'GET')
     {
+        $article = findArticleById($id_article);
 
-        $data['article'] = getOne($id_article);
-        $data['view_title'] = 'Modification d\'article: ' . $data['article']['titre'];
+        $data['view_title'] = 'Modification de l\'article "' . $article['titre'] . '"';
+        $data['article'] = $article;
+
         $html = $a . $c . '.php';
-
         return array('data' => $data, 'html' => $html);
     }
-
 
 }
 
 function ajouter()
 {
-    global $a, $c, $validActions, $validEntities;
+    global $a, $c;
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST')
+    {
 
-        add();
+        $champs['article']['titre'] = $_POST['titre'];
+        $champs['article']['article'] = $_POST['article'];
+        $champs['article']['date_parution'] = date('Y-m-j');
 
-        header('Location:' . $_SERVER['PHP_SELF']);
+        addArticle($champs);
+
+        header('Location:' . listerArticleUrl($champs['article']));
     }
     elseif ($_SERVER['REQUEST_METHOD'] == 'GET')
     {
-
-
         $data['view_title'] = 'Ajout d\'article: ';
         $html = $a . $c . '.php';
 
@@ -74,70 +70,67 @@ function ajouter()
 
 function supprimer()
 {
-    global $a, $c, $validActions, $validEntities;
+    global $a, $c;
 
-    if (isset($_REQUEST['id_article'])) {
-        $id_article = $_REQUEST['id_article'];
-        if (!_idArticleExiste($id_article)) {
-            header('Location:index.php?c=error&a=e_404');
-        }
-    }
-    else
+    $id_article = _getIdarticleFromRequest();
+    _testIdarticle($id_article);
+
+    if ($_SERVER['REQUEST_METHOD'] == 'POST')
     {
-        header('Location:index.php?c=error&a=e_404');
-    }
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        deleteArticle($id_article);
 
-        delete($id_article);
-
-        header('Location:' . $_SERVER['PHP_SELF'] . '?a=' . $validActions['lister'] . '&c=' . $validEntities['article'] . '&id_article=' . $id_article);
+        header('Location:' . listerArticleUrl());
     }
     elseif ($_SERVER['REQUEST_METHOD'] == 'GET')
     {
 
-        $data['article'] = getOne($id_article);
-        $data['view_title'] = 'Supression de l\'article: ' . $data['article']['titre'];
-        $html = $a . $c . '.php';
+        $article = findArticleById($id_article);
 
+        $data['view_title'] = 'Suppression de l\'article ' . $article['titre'];
+        $data['article'] = $article;
+
+        $html = $a . $c . '.php';
         return array('data' => $data, 'html' => $html);
     }
-
-
 }
 
 function voir()
 {
     global $a, $c;
 
-    if (isset($_GET['id_article'])) {
+    $id_article = _getIdarticleFromRequest();
+    _testIdarticle($id_article);
 
-        $id_article = $_GET['id_article'];
+    $article = findArticleById($id_article);
 
-        if (!_idArticleExiste($id_article)) {
-            die('l\'id article fournit n\'existe pas dans la base de donnée!');
-            //header('Location:index.php?c=error&a=e_404');
-        }
-    }
-    else {
-        die('vous devez fournir un id article pour voir l\'article');
-        //header('Location:index.php?c=error&a=e_404');
-    }
+    $data['view_title'] = 'Article: ' . $article['titre'];
+    $data['article'] = $article;
+    $data['article']['commentaires'] = findCommentsByIdArticle($article['id_article']);
 
-    $data['articles'] = getList();
-    $data['article'] = getOne($id_article);
-    $data['view_title'] = 'Fiche de l\'article: ' . $data['article']['titre'];
     $html = $a . $c . '.php';
 
     return array('data' => $data, 'html' => $html);
 }
 
-function _idArticleExiste($id_article)
+function _getIdarticleFromRequest()
 {
-    if (!getidArticleCount($id_article)) {
-        return false;
+    global $a;
+
+    if (!isset($_REQUEST['id_article']))
+    {
+        die('Vous devez fournir un id article pour ' . $a . ' un article');
+        //header('Location:index.php?c=error&a=e_404');
     }
-    else {
-        return true;
+
+    return $_REQUEST['id_article'];
+}
+
+function _testIdarticle($id_article)
+{
+    if (countArticleById($id_article) < 1)
+    {
+        die('L\'id_article fourni n\'existe pas dans la base de données');
+        //header('Location:index.php?c=error&a=e_404');
     }
 }

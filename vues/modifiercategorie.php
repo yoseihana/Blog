@@ -9,18 +9,16 @@
                 ID categorie:
             </label>
             <br/>
-            <input type="text" name="id_categorie" value="<?php echo ($view['data']['categorie']['id_categorie']); ?>"/>
+            <input type="text" id="id_categorie" name="id_categorie" value="<?php echo ($view['data']['categorie']['id_categorie']); ?>"/>
             </br>
             <label for="categorie">
                 Catégorie:
             </label>
             <br/>
-            <input type="text" name="rurbrique" value="<?php echo ($view['data']['categorie']['categorie']); ?>"/>
+            <input type="text" id="categorie" name="categorie" value="<?php echo ($view['data']['categorie']['categorie']); ?>"/>
 
-            <input type="hidden" name="c" value="<?php echo ($validEntities['categorie']); ?>"/>
+            <input type="hidden" name="c" value="<?php echo ($validControllers['categorie']); ?>"/>
             <input type="hidden" name="a" value="<?php echo ($validActions['modifier']); ?>"/>
-            <input type="hidden" name="id_categorie"
-                   value="<?php echo ($view['data']['categorie']['id_categorie']); ?>"/>
 
             <div class="bouton">
                 <input type="submit" value="Modifier"/>

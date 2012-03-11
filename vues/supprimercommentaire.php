@@ -13,7 +13,7 @@
 
             <p class="post"> <?php echo ($view['data']['commentaire']['texte']); ?> </p>
 
-            <input type="hidden" name="c" value="<?php echo ($validEntities['commentaire']); ?>"/>
+            <input type="hidden" name="c" value="<?php echo ($validControllers['commentaire']); ?>"/>
             <input type="hidden" name="a" value="<?php echo ($validActions['supprimer']); ?>"/>
             <input type="hidden" name="id_commentaire"
                    value="<?php echo ($view['data']['commentaire']['id_commentaire']); ?>"/>

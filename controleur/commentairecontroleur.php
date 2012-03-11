@@ -1,108 +1,96 @@
 <?php
 
-include 'modeles/' . $c . '.php';
-
-function lister()
-{
-    global $a, $c;
-
-    $data['view_title'] = 'Liste des articles';
-    $data['articles'] = getList();
-    $html = $a . $c . '.php';
-
-
-    $data['view_title'] = 'Liste des commentaires';
-    $data['commentaires'] = getList();
-    $html = $a . $c . '.php';
-    return array('data' => $data, 'html' => $html);
-
-}
+include 'modeles/commentaire.php';
+include 'modeles/article.php';
 
 function modifier()
 {
-    global $a, $c, $validActions, $validEntities;
+    global $a, $c;
 
-    if (isset($_REQUEST['id_commentaire'])) {
-        $id_commentaire = $_REQUEST['id_commentaire'];
-        if (!_idCommentaireExiste($id_commentaire)) {
-            die('l\'id commentaire fournit n\'existe pas dans la base de donnée!');
-            //header('Location:index.php?c=error&a=e_404');
-        }
-    }
-    else
+    // Récupère l'isbn depuis $_REQUEST avec gestion d'erreurs
+    $id_commentaire = _getIdcommentaireFromRequest();
+
+    // Test l'existance de l'isbn dans la DB
+    _testIdcommentaire($id_commentaire);
+
+    // POST - modifier le livre en DB
+    // GET - données pour le formulaire
+    if ($_SERVER['REQUEST_METHOD'] == 'POST')
     {
-        die('vous devez fournir un id commentaire pour voir le commentaire');
-        //header('Location:index.php?c=error&a=e_404');
-    }
+        $champs['commentaire']['id_commentaire'] = $id_commentaire;
+        $champs['commentaire']['nom_auteur'] = $_POST['nom_auteur'];
+        $champs['commentaire']['texte'] = $_POST['texte'];
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $champsCommentaire['nom_auteur'] = $_POST['nom_auteur'];
-        $champsCommentaire['texte'] = $_POST['texte'];
-        $champsCommentaire['id_commentaire'] = $id_commentaire;
+        updateComment($champs);
 
-        update($champsCommentaire);
+        $id_article = $_POST['id_article'];
 
-        header('Location:' . $_SERVER['PHP_SELF'] . '?a=' . $validActions['lister'] . '&c=' . $validEntities['commentaire']);
+        header('Location:' . voirArticleUrl($id_article, 'comments')); // donne la page index.php qui est par défaut
     }
     elseif ($_SERVER['REQUEST_METHOD'] == 'GET')
     {
+        $commentaire = findCommentById($id_commentaire);
 
-        $data['commentaire'] = getOne($id_commentaire);
-        $data['view_title'] = 'Modification du commentaire: ' . $data['commentaire']['nom_auteur'];
+        $data['view_title'] = 'Modification du commentaire: ' . $commentaire['nom_auteur'];
+        $data['commentaire'] = $commentaire; // Le livre à modifier
+
         $html = $a . $c . '.php';
-
         return array('data' => $data, 'html' => $html);
     }
-
-
 }
 
 function ajouter()
 {
-    global $a, $c, $validActions, $validEntities;
+    global $a, $c;
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST')
+    {
+        $champs['commentaire']['nom_auteur'] = $_POST['nom_auteur'];
+        $champs['commentaire']['texte'] = $_POST['texte'];
+        $champs['commentaire']['date'] = date('Y-m-d');
 
-        add();
+        $champs['commentaire']['id_article'] = $_POST['id_article'];
 
-        header('Location:' . $_SERVER['PHP_SELF']); // donne la page index.php qui est par défaut
+        addComment($champs);
+
+        // Redirection
+        header('Location:' . voirArticleUrl($_POST['id_article'], 'comments')); // donne la page index.php qui est par défaut
     }
-    elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
+    elseif ($_SERVER['REQUEST_METHOD'] == 'GET')
+    {
+        $id_article = _getIdarticleFromRequest();
 
+        $data['view_title'] = 'Ajout d\'un commentaire';
+        $data['article']['id_article'] = $id_article;
 
-        $data['view_title'] = 'Ajout de commentaire: ';
         $html = $a . $c . '.php';
-
         return array('data' => $data, 'html' => $html); // returne
     }
 }
 
 function supprimer()
 {
-    global $a, $c, $validActions, $validEntities;
+    global $a, $c;
 
-    if (isset($_REQUEST['id_commentaire'])) {
-        $id_commentaire = $_REQUEST['id_commentaire'];
-        if (!_idCommentaireExiste($id_commentaire)) {
-            header('Location:index.php?c=error&a=e_404');
-        }
+    $id_commentaire = _getIdcommentaireFromRequest();
+    _testIdcommentaire($id_commentaire);
+
+    if ($_SERVER['REQUEST_METHOD'] == 'POST')
+    {
+
+        deleteComment($id_commentaire);
+
+        header('Location:' . listerArticleUrl());
     }
-    else {
-        header('Location:index.php?c=error&a=e_404');
-    }
+    elseif ($_SERVER['REQUEST_METHOD'] == 'GET')
+    {
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $commentaire = findCommentById($id_commentaire);
 
-        delete($id_commentaire);
+        $data['view_title'] = 'Suppression du commentaire ' . $commentaire['nom_auteur'];
+        $data['commentaire'] = $commentaire;
 
-        header('Location:' . $_SERVER['PHP_SELF']); // donne la page index.php qui est par défaut
-    }
-    elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
-
-        $data['commentaire'] = getOne($id_commentaire);
-        $data['view_title'] = 'Supression du commentaire: ' . $data['commentaire']['nom_auteur'];
         $html = $a . $c . '.php';
-
         return array('data' => $data, 'html' => $html);
     }
 }
@@ -111,31 +99,52 @@ function voir()
 {
     global $a, $c;
 
-    if (isset($_GET['id_commentaire'])) {
-        $id_commentaire = $_GET['id_commentaire'];
-        if (!_idCommentaireExiste($id_commentaire)) {
-            die('l\'id commentaire fournit n\'existe pas dans la base de donnée!');
-            //header('Location:index.php?c=error&a=e_404');
-        }
-    }
-    else {
-        die('vous devez fournir un id_commenatire pour voir le commentaire');
-        //header('Location:index.php?c=error&a=e_404');
-    }
+    $id_commentaire = _getIdcommentaireFromRequest();
+    _testIdcommentaire($id_commentaire);
 
-    $data['commentaires'] = getList();
-    $data['commentaire'] = getOne($id_commentaire);
+    $commentaire = findCommentById($id_commentaire);
+
+    $data['view_title'] = 'Commentaire de ' . $commentaire['nom_auteur'];
+    $data['commentaire'] = $commentaire;
+    $data['article']['id_article'] = findArticleById($commentaire['id_article']);
+
     $html = $a . $c . '.php';
 
     return array('data' => $data, 'html' => $html);
 }
 
-function _idCommentaireExiste($id_commentaire)
+function _getIdcommentaireFromRequest()
 {
-    if (!getidCommentaireCount($id_commentaire)) {
-        return false;
+    global $a;
+
+    if (!isset($_REQUEST['id_commentaire']))
+    {
+        die('Vous devez fournir un id commentaire pour ' . $a . ' un commentaire');
+        //header('Location:index.php?c=error&a=e_404');
     }
-    else {
-        return true;
+
+    return $_REQUEST['id_commentaire'];
+}
+
+function _getIdArticleFromRequest()
+{
+    global $a;
+
+    if (!isset($_REQUEST['id_article']))
+    {
+        die('Vous devez fournir un id article pour ' . $a . ' un commentaire');
+        //header('Location:index.php?c=error&a=e_404');
+    }
+
+    return $_REQUEST['id_article'];
+}
+
+
+function _testIdcommentaire($id_commentaire)
+{
+    if (countCommentById($id_commentaire) < 1)
+    {
+        die('L\'id commentaire fourni n\'existe pas dans la base de données');
+        //header('Location:index.php?c=error&a=e_404');
     }
 }

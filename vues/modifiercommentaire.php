@@ -9,20 +9,20 @@
                 Nom:
             </label>
             <br/>
-            <input type="text" name="nom_auteur" value="<?php echo ($view['data']['commentaire']['nom_auteur']); ?>"/>
+            <input type="text" id="nom_auteur" name="nom_auteur" value="<?php echo ($view['data']['commentaire']['nom_auteur']); ?>"/>
             <br/>
             <label for="texte">
                 Texte:
             </label>
             <br/>
-            <textarea rows="15" cols="75" name="article">
+            <textarea rows="15" id="texte" cols="75" name="texte">
                 <?php echo ($view['data']['commentaire']['texte']); ?>
             </textarea>
 
-            <input type="hidden" name="c" value="<?php echo ($validEntities['commentaire']); ?>"/>
+            <input type="hidden" name="c" value="<?php echo ($validControllers['commentaire']); ?>"/>
             <input type="hidden" name="a" value="<?php echo ($validActions['modifier']); ?>"/>
-            <input type="hidden" name="id_commentaire"
-                   value="<?php echo ($view['data']['commentaire']['id_commentaire']); ?>"/>
+            <input type="hidden" name="id_commentaire" value="<?php echo ($view['data']['commentaire']['id_commentaire']); ?>"/>
+            <input type="hidden" name="id_article" value="<?php echo ($view['data']['commentaire']['id_article']); ?>"/>
 
             <div class="bouton">
                 <input type="submit" value="Modifier"/>

@@ -1,86 +1,84 @@
 <?php
 
-function getList()
-{
-    global $connex;
-
-    $req = 'SELECT * FROM commentaire ORDER BY id_article';
-
-    try {
-        $res = $connex->query($req);
-        $commentaire = $res->fetchAll();
-    }
-    catch (PDOException $e) {
-        die($e->getMessage());
-    }
-    return $commentaire;
-
-    $req = 'SELECT * FROM article ORDER BY id_article';
-
-    try {
-        $res = $connex->query($req);
-        $article = $res->fetchAll();
-    }
-    catch (PDOException $e) {
-        die($e->getMessage());
-    }
-    return $article;
-}
-
-function getOne($id_commentaire)
+function findCommentById($id_commentaire)
 {
     global $connex;
 
     $req = 'SELECT * FROM commentaire WHERE id_commentaire = :id_commentaire';
 
-    try {
+    try
+    {
         $ps = $connex->prepare($req);
-
         $ps->bindValue(':id_commentaire', $id_commentaire);
         $ps->execute();
 
         $commentaire = $ps->fetch();
     }
-    catch (PDOException $e) {
+    catch (PDOException $e)
+    {
         die($e->getMessage());
     }
     return $commentaire;
 }
 
-function delete($data)
+function findCommentsByIdArticle($id_article)
+{
+    global $connex;
+
+    $req = 'SELECT * FROM commentaire WHERE id_article = :id_article';
+
+    try
+    {
+        $ps = $connex->prepare($req);
+        $ps->bindValue(':id_article', $id_article);
+        $ps->execute();
+
+        $commentaires = $ps->fetchAll();
+    }
+    catch (PDOException $e)
+    {
+        die($e->getMessage());
+    }
+    return $commentaires;
+}
+
+function deleteComment($id_commentaire)
 {
 
     global $connex;
     $req = 'DELETE FROM commentaire WHERE id_commentaire = :id_commentaire';
 
-    try {
+    try
+    {
         $ps = $connex->prepare($req);
-        $ps->bindValue(':id_commentaire', $data['id_commentaire']);
+        $ps->bindValue(':id_commentaire', $id_commentaire);
         $ps->execute();
     }
-    catch (PDOException $e) {
+    catch (PDOException $e)
+    {
         die($e->getMessage());
     }
 
     return true;
 }
 
-function update($data)
+function updateComment($data)
 {
-
     global $connex;
 
     $req = 'UPDATE commentaire SET nom_auteur = :nom_auteur, texte = :texte WHERE id_commentaire = :id_commentaire';
 
-    try {
+    try
+    {
         $ps = $connex->prepare($req);
 
-        $ps->bindValue(':id_commentaire', $data['id_commentaire']);
-        $ps->bindValue(':nom_auteur', $data['nom_auteur']);
-        $ps->bindValue(':texte', $data['texte']);
+        $ps->bindValue(':id_commentaire', $data['commentaire']['id_commentaire']);
+        $ps->bindValue(':nom_auteur', $data['commentaire']['nom_auteur']);
+        $ps->bindValue(':texte', $data['commentaire']['texte']);
         $ps->execute();
     }
-    catch (PDOException $e) {
+    catch (PDOException $e)
+    {
         die($e->getMessage());
         //header('Location: index.php?c=error&a=e_database');
     }
@@ -88,48 +86,58 @@ function update($data)
     return true;
 }
 
-function add()
+function addComment($data)
 {
     global $connex;
 
-    $req = 'INSERT INTO commentaire VALUE ( :id_commentaire, :nom_auteur, :texte, :date)';
+    $req1 = 'INSERT INTO commentaire VALUE ( null, :nom_auteur, :texte, :date, :id_article)';
+    $req2 = 'UPDATE article SET nb_commentaire = nb_commentaire+1 WHERE id_article = :id_article';
 
-    try {
-        $ps = $c->prepare($req);
+    try
+    {
+        $connex->beginTransaction();
 
-        $ps->bindValue(':id_commentaire', $data['id_commentaire']);
-        $ps->bindValue(':nom_auteur', $data['nom_auteur']);
-        $ps->bindValue(':texte', $data['texte']);
-        $ps->bindValue(':date', $data['date']);
-
+        $ps = $connex->prepare($req1);
+        $ps->bindValue(':nom_auteur', $data['commentaire']['nom_auteur']);
+        $ps->bindValue(':texte', $data['commentaire']['texte']);
+        $ps->bindValue(':date', $data['commentaire']['date']);
+        $ps->bindValue(':id_article', $data['commentaire']['id_article']);
         $ps->execute();
 
-        $livre = $ps->fetch();
+        $ps = $connex->prepare($req2);
+        $ps->bindValue(':id_article', $data['commentaire']['id_article']);
+        $ps->execute();
+
+        $connex->commit();
+
     }
-    catch (PDOException $e) {
+    catch (PDOException $e)
+    {
+
+        $connex->rollBack();
         die($e->getMessage());
     }
-
-    return $commentaire;
 }
 
-function getidCommentaireCount($id_commentaire)
+function countCommentById($id_commentaire)
 {
     global $connex;
+
     $req = 'SELECT count(id_commentaire) AS nb_id_commentaire FROM commentaire WHERE id_commentaire = :id_commentaire';
 
-    try {
+    try
+    {
         $ps = $connex->prepare($req);
         $ps->bindValue(':id_commentaire', $id_commentaire);
-        $ps->execute(); // execution
+        $ps->execute();
     }
-    catch (PDOException $e) {
+    catch (PDOException $e)
+    {
         die($e->getMessage());
         //header ('Location: index.php?c=error&a=e_database');
     }
 
-    $nbidCommentaire = $ps->fetch();
-    $nbidCommentaire = $nbidCommentaire['nb_id_commentaire'];
+    $nbId = $ps->fetch();
 
-    return $nbidCommentaire['nb_id_commentaire'];
+    return $nbId['nb_id_commentaire']; // retourne 0 ou 1
 }

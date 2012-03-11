@@ -1,28 +1,31 @@
 <?php
 
-function getList()
+function getAllCategories()
 {
     global $connex;
 
-    $req = 'SELECT * FROM categorie';
+    $req = 'SELECT * FROM categorie ORDER BY categorie';
 
-    try {
+    try
+    {
         $res = $connex->query($req);
-        $categorie = $res->fetchAll();
+        $categories = $res->fetchAll();
     }
-    catch (PDOException $e) {
+    catch (PDOException $e)
+    {
         die($e->getMessage());
     }
-    return $categorie;
+    return $categories;
 }
 
-function getOne($id_categorie)
+function findCategorieById($id_categorie)
 {
     global $connex;
 
     $req = 'SELECT * FROM categorie WHERE id_categorie = :id_categorie';
 
-    try {
+    try
+    {
         $ps = $connex->prepare($req);
 
         $ps->bindValue(':id_categorie', $id_categorie);
@@ -30,46 +33,61 @@ function getOne($id_categorie)
 
         $categorie = $ps->fetch();
     }
-    catch (PDOException $e) {
+    catch (PDOException $e)
+    {
         die($e->getMessage());
     }
     return $categorie;
 }
 
-function delete($data)
+function deleteCategorie($id_categorie)
 {
-
     global $connex;
-    $req = 'DELETE FROM categorie WHERE id_categorie = :id_categorie';
 
-    try {
-        $ps = $connex->prepare($req);
-        $ps->bindValue(':id_categorie', $data['id_categorie']);
+    $req1 = 'DELETE FROM lien WHERE id_categorie = :id_categorie';
+    $req2 = 'DELETE FROM categorie WHERE id_categorie = :id_categorie';
+
+    try
+    {
+        $connex->beginTransaction();
+
+        $ps = $connex->prepare($req1);
+        $ps->bindValue(':id_categorie', $id_categorie);
         $ps->execute();
+
+        $ps = $connex->prepare($req2);
+        $ps->bindValue(':id_categorie', $id_categorie);
+        $ps->execute();
+
+        $connex->commit();
     }
-    catch (PDOException $e) {
+    catch (PDOException $e)
+    {
+        $connex->rollBack();
         die($e->getMessage());
     }
 
     return true;
 }
 
-function update($data)
+function updateCategorie($data)
 {
 
     global $connex;
 
     $req = 'UPDATE categorie SET id_categorie = :id_categorie, categorie = :categorie WHERE id_categorie = :id_categorie';
 
-    try {
+    try
+    {
         $ps = $connex->prepare($req);
 
-        $ps->bindValue(':id_categorie', $data['id_categorie']);
-        $ps->bindValue(':categorie', $data['categorie']);
+        $ps->bindValue(':id_categorie', $data['categorie']['id_categorie']);
+        $ps->bindValue(':categorie', $data['categorie']['categorie']);
 
         $ps->execute();
     }
-    catch (PDOException $e) {
+    catch (PDOException $e)
+    {
         die($e->getMessage());
         //header('Location: index.php?c=error&a=e_database');
     }
@@ -77,58 +95,50 @@ function update($data)
     return true;
 }
 
-function add()
+function addCategorie($data)
 {
 
+    global $connex;
 
-    if (!getidCategorieCount($_POST['id_categorie'])) {
-        global $connex;
+    $req = 'INSERT INTO categorie VALUES ( :id_categorie, :categorie)';
 
-        $req = 'INSERT INTO categorie VALUES (:id_categorie, :categorie);';
-        // $req2 = 'INSERT INTO ecrit VALUES (:isbn, :id_auteur)';
+    try
+    {
+        $ps = $connex->prepare($req);
 
+        $ps->bindValue(':id_categorie', $data['categorie']['id_categorie']);
+        $ps->bindValue(':categorie', $data['categorie']['categorie']);
+        $ps->execute();
 
-        try {
-            $ps = $connex->prepare($req);
-
-            $ps->bindValue(':id_categorie', $_POST['id_categorie']);
-            $ps->bindValue(':categorie', $_POST['categorie']);
-            $ps->execute();
-
-            /* $ps = $connex->prepare($req2);
-              $ps->bindValue(':isbn', $_POST['isbn']);
-              $ps->bindValue(':id_auteur', $_POST['id_auteur']);
-              $ps->execute(); */
-        }
-        catch (PDOException $e) {
-            die($e->getMessage());
-            //header('Location: index.php?c=error&a=e_database');
-        }
-
-        return true;
     }
-    else {
-        return false;
+    catch (PDOException $e)
+    {
+        die($e->getMessage());
+        //header('Location: index.php?c=error&a=e_database');
     }
+
+    return true;
+
 }
 
-function getidCategorieCount($id_categorie)
+function countCategorieById($id_categorie)
 {
     global $connex; // récupérer la connection
     $req = 'SELECT count(id_categorie) AS nb_id_categorie FROM categorie WHERE id_categorie = :id_categorie'; // récupère le nbre d'isbn
 
-    try {
+    try
+    {
         $ps = $connex->prepare($req); // connection
         $ps->bindValue(':id_categorie', $id_categorie); //les valeurs sont liées
         $ps->execute(); // execution
     }
-    catch (PDOException $e) {
+    catch (PDOException $e)
+    {
         die($e->getMessage());
         //header ('Location: index.php?c=error&a=e_database');
     }
 
-    $nbidCategorie = $ps->fetch();
-    $nbidCategorie = $nbidCategorie['nb_id_categorie']; // extraction du nbre de ISBN trouver
+    $nbIdCategorie = $ps->fetch();
 
-    return $nbidCategorie['nb_id_categorie']; // retourne 0 ou 1
+    return $nbIdCategorie['nb_id_categorie']; // retourne 0 ou 1
 }

@@ -12,7 +12,7 @@
             <p> <?php echo ($view['data']['categorie']['categorie']); ?> </p>
 
 
-            <input type="hidden" name="c" value="<?php echo ($validEntities['categorie']); ?>"/>
+            <input type="hidden" name="c" value="<?php echo ($validControllers['categorie']); ?>"/>
             <input type="hidden" name="a" value="<?php echo ($validActions['supprimer']); ?>"/>
             <input type="hidden" name="id_categorie"
                    value="<?php echo ($view['data']['categorie']['id_categorie']); ?>"/>

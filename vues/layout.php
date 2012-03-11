@@ -52,6 +52,7 @@
 
 <body>
 <div class="main">
+
     <?php include('header.php'); ?>
     <!-- FIN header -->
 

@@ -1,14 +1,14 @@
-<?php if (count($view['data'] ['articles'])): ?>
+<?php if (count($view['data'] ['articles']) > 0): ?>
 <?php foreach ($view['data']['articles'] as $article): ?>
     <div class="article">
         <div class="comment">
             <p class="lien">
-                <a href="?c=<?php echo $GLOBALS['validEntities']['commentaire']; ?>&a=<?php echo $GLOBALS['validActions']['lister']; ?>"/><?php echo $article['nb_commentaire']; ?></a>
+                <a href="<?php echo voirArticleUrl($article['id_article'], 'comments'); ?>"/><?php echo $article['nb_commentaire']; ?></a>
             </p>
         </div>
 
         <h1>
-            <a href="?c=<?php echo $GLOBALS['validEntities']['article']; ?>&a=<?php echo $GLOBALS['validActions']['voir']; ?>&id_article=<?php echo($article['id_article']); ?>"><?php echo $article['titre']; ?></a>
+            <a href="<?php echo voirArticleUrl($article['id_article']); ?>"><?php echo $article['titre']; ?></a>
         </h1>
 
         <p class="post">
@@ -21,25 +21,24 @@
 
         <div class="lien">
             <?php if ($connected): ?>
-            <a href="?c=<?php echo $GLOBALS['validEntities']['article']; ?>&a=<?php echo $GLOBALS['validActions']['modifier']; ?>&id_article=<?php echo($article['id_article']); ?>">Modifier</a>
+            <a href="<?php echo modifierArticleUrl($article['id_article']); ?>">Modifier</a>
             -
-            <a href="?c=<?php echo $GLOBALS['validEntities']['article']; ?>&a=<?php echo $GLOBALS['validActions']['supprimer']; ?>&id_article=<?php echo($article['id_article']); ?>">Supprimer</a>
+            <a href="<?php echo supprimerArticleUrl($article['id_article']); ?>">Supprimer</a>
             -
-            <a href="?c=<?php echo $GLOBALS['validEntities']['article']; ?>&a=<?php echo $GLOBALS['validActions']['ajouter']; ?>">Ajouter
+            <a href="<?php echo ajouterArticleUrl(); ?>">Ajouter
                 un article</a>
             <?php endif; ?>
         </div>
         <div class="lecture">
-            <a href="?c=<?php echo $GLOBALS['validEntities']['article']; ?>&a=<?php echo $GLOBALS['validActions']['voir']; ?>&id_article=<?php echo($article['id_article']); ?>">Lire
-                la suite</a>
+            <a href="<?php echo voirArticleUrl($article['id_article']); ?>">Lire la suite</a>
         </div>
         <div class="comment">
             <p class="lien">
-                <a href="?c=<?php echo $GLOBALS['validEntities']['commentaire']; ?>&a=<?php echo $GLOBALS['validActions']['ajouter']; ?>&id_article=<?php echo($article['id_article']); ?>">Poster
-                    un commentaire</a>
+                <a href="<?php echo ajouterCommentaireUrl(); ?>">Poster un commentaire</a>
             </p>
         </div>
     </div>
+
     <?php endforeach; ?>
 <?php endif; ?>
 

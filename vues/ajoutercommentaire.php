@@ -9,18 +9,17 @@
                 Nom:
             </label>
             <br/>
-            <input type="text" name="nom_auteur" value="Nom"/>
+            <input type="text" id="nom_auteur" name="nom_auteur" value="Nom"/>
             <br/>
             <label for="texte">
                 Texte:
             </label>
             <br/>
-            <textarea cols="75" name="texte" rows="15">
-                Votre commentaire
+            <textarea cols="75" id="texte" name="texte" rows="15">
+
             </textarea>
 
-
-            <input type="hidden" name="c" value="<?php echo ($validEntities['article']); ?>"/>
+            <input type="hidden" name="c" value="<?php echo ($validControllers['commentaire']); ?>"/>
             <input type="hidden" name="a" value="<?php echo ($validActions['ajouter']); ?>"/>
             <input type="hidden" name="id_article" value="<?php echo ($view['data']['article']['id_article']); ?>"/>
 

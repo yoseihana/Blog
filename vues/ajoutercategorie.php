@@ -18,7 +18,7 @@
             <input type="text" name="categorie" value="Apple"/>
 
 
-            <input type="hidden" name="c" value="<?php echo ($validEntities['categorie']); ?>"/>
+            <input type="hidden" name="c" value="<?php echo ($validControllers['categorie']); ?>"/>
             <input type="hidden" name="a" value="<?php echo ($validActions['ajouter']); ?>"/>
             <input type="hidden" name="id_article" value="<?php echo ($view['data']['categorie']['id_categorie']); ?>"/>
 

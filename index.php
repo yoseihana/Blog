@@ -6,8 +6,10 @@ session_start();
 ini_set('display_errors', 1);
 
 include ('./config/config.php');
+include('./helpers/url.php');
 
-try {
+try
+{
     $connex = new PDO(DSN, USER, PASS, $options);
     $connex->query('SET CHARACTER SET UTF8');
     $connex->query('SET NAMES UTF8');
@@ -19,14 +21,16 @@ catch (PDOException $e)
 
 }
 
-
 //Routage
-if (isset ($_REQUEST['a']) && isset ($_REQUEST['c'])) {
-    if (in_array($_REQUEST['a'], $GLOBALS['validActions']) && in_array($_REQUEST['c'], $GLOBALS['validEntities'])) {
+if (isset ($_REQUEST['a']) && isset ($_REQUEST['c']))
+{
+    if (in_array($_REQUEST['a'], $validActions) && in_array($_REQUEST['c'], $validControllers))
+    {
         $a = $_REQUEST['a'];
         $c = $_REQUEST['c'];
 
-    } else {
+    } else
+    {
 
         die('a et ou c ne sont pas valides');
         //header('Location:index.php?c=error&a=e_404');
@@ -35,7 +39,7 @@ if (isset ($_REQUEST['a']) && isset ($_REQUEST['c'])) {
 else
 {
     $a = DEFAULT_ACTION; // lister
-    $c = DEFAULT_CONTROLLER; //livre
+    $c = DEFAULT_CONTROLLER; //article
 }
 
 

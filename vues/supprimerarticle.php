@@ -9,7 +9,7 @@
 
             <p class="post"> <?php echo ($view['data']['article']['article']); ?> </p>
 
-            <input type="hidden" name="c" value="<?php echo ($validEntities['article']); ?>"/>
+            <input type="hidden" name="c" value="<?php echo ($validControllers['article']); ?>"/>
             <input type="hidden" name="a" value="<?php echo ($validActions['supprimer']); ?>"/>
             <input type="hidden" name="id_article" value="<?php echo ($view['data']['article']['id_article']); ?>"/>
 
