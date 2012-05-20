@@ -1,6 +1,6 @@
 <div id="header">
     <h1>
-        <a href="#" title="home">AnNa's Blog</a> <!-- Placer logo -->
+        <a href="<?php listerArticleUrl(); ?>" title="home" id="logo">AnNa's Blog</a> <!-- Placer logo -->
     </h1>
     <ul id="nav">
         <li>

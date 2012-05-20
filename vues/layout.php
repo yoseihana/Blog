@@ -57,39 +57,21 @@
     <!-- FIN header -->
 
     <div class="content">
-        <div class="colonneGauche">
-            <?php include($view['html']); ?>
-        </div>
+        <!-- <div class="colonneGauche"> -->
+        <?php include($view['html']); ?>
+        <!-- </div>
 
-        <!-- FIN colonneGauche -->
-        <div class="colonneDroite">
-            <?php include('apropos.php'); ?>
+     <!-- FIN colonneGauche -->
+        <!-- <div class="colonneDroite">
+            <?php //include('apropos.php'); ?>
             <!-- FIN contenu -->
 
 
-            <?php include('liens.php'); ?>
+        <?php //include('liens.php'); ?>
 
-            <!-- FIN contenu -->
+        <?php //include('categorie.php') ?>
 
-            <!--<div class="contenu">
-                 <h1>
-                         Archives
-                 </h1>
-                 <ol class="lien">
-                         <li>
-                                 <a href="./archive.html" title="Archive janvier 2012">Janvier 2012</a>
-                         </li>
-                         <li>
-                                 <a href="./archive.html" title="Archive décembre 2011">Décembre 2011</a>
-                         </li>
-                         <li>
-                                 <a href="./archive.html" title="Archive novembre 2011">Novembre 2011</a>
-                         </li>
-                 </ol>
-         </div>
-         <!-- FIN contenu -->
-
-        </div>
+        <!--</div>
         <!-- FIN colonneDroite -->
 
     </div>

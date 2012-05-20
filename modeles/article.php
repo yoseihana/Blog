@@ -1,10 +1,10 @@
 <?php
 
-function getAllArticles()
+function getAllArticles($pagination)
 {
     global $connex;
 
-    $req = 'SELECT * FROM article ORDER BY date_parution DESC';
+    $req = 'SELECT * FROM article ORDER BY date_parution DESC LIMIT ' . $pagination . ',5';
 
     try
     {
@@ -133,4 +133,20 @@ function countArticleById($id_article)
     $nbidArticle = $ps->fetch();
 
     return $nbidArticle['nb_id_article']; // retourne 0 ou 1
+}
+
+function countArticle()
+{
+    global $connex;
+    $req = 'SELECT COUNT(*) AS total FROM article';
+
+    try
+    {
+        $ps = $connex->query($req);
+        $totalArticles = $ps->fetch();
+    } catch (PDOException $e)
+    {
+        die($e->getMessage());
+    }
+    return $totalArticles;
 }

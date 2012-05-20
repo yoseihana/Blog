@@ -5,13 +5,41 @@ include 'modeles/commentaire.php';
 
 function lister()
 {
-    global $a, $c;
+    /* global $a, $c;
 
-    $data['view_title'] = 'Liste des articles';
-    $data['articles'] = getAllArticles();
+$data['view_title'] = 'Liste des articles';
+$data['articles'] = getAllArticles();
+//$data['article']['categories'] = getAllCategories();
+
+$html = $a . $c . '.php';
+return array('data' => $data, 'html' => $html); */
+
+    global $a, $c;
+    $totalArticles = countArticle();
+
+    $nombreDePages = ceil($totalArticles['total'] / 5);
+
+    if (isset($_GET['page']))
+    {
+        $pageActuelle = intval($_GET['page']);
+        if ($pageActuelle > $nombreDePages)
+        {
+            $pageActuelle = $nombreDePages;
+        }
+    }
+    else
+    {
+        $pageActuelle = 1;
+    }
+
+    $pagination = ($pageActuelle - 1) * 5;
+    $data['articles'] = getAllArticles($pagination);
+    $data['nbPage'] = $nombreDePages;
 
     $html = $a . $c . '.php';
-    return array('data' => $data, 'html' => $html);
+    $view = array('data'=> $data, 'html'=> $html);
+
+    return $view;
 }
 
 function modifier()
