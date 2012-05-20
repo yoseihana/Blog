@@ -267,3 +267,7 @@ h1.voir {
 .pagination a:hover {
     text-decoration: underline;
 }
+
+.article input, .article textarea {
+    margin: 0.5em 0 1em 0;
+}

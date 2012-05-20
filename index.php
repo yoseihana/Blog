@@ -29,7 +29,8 @@ if (isset ($_REQUEST['a']) && isset ($_REQUEST['c']))
         $a = $_REQUEST['a'];
         $c = $_REQUEST['c'];
 
-    } else
+    }
+    else
     {
 
         die('a et ou c ne sont pas valides');
@@ -47,6 +48,8 @@ include('controleur/' . $c . 'controleur.php');
 
 $view = call_user_func($a);
 
-$connected = isset($_SESSION['connected']) ? $_SESSION['connected'] : false;
+//$connected = isset($_SESSION['connected']) ? $_SESSION['connected'] : false;
+
+$connected = true;
 
 include ('vues/layout.php');

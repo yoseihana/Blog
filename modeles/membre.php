@@ -16,7 +16,7 @@ function getMemberCount($data)
     catch (PDOException $e)
     {
         die($e->getMessage());
-        //header ('Location: index.php?c=error&a=e_database');
+        header('Location: index.php?c=error&a=e_database');
     }
 
     $nbMembre = $ps->fetch();

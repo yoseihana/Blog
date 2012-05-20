@@ -37,10 +37,13 @@
             <p>
                 <?php echo($commentaire['texte']); ?>
             </p>
+
             <?php if ($connected): ?>
-                <a href="<?php echo modifierCommentaireUrl($commentaire['id_commentaire']); ?>"> Modifier</a>
-                -
-                <a href="<?php echo supprimerCommentaireUrl($commentaire['id_commentaire']); ?>">Supprimer</a>
+                <div class="lien">
+                    <a href="<?php echo modifierCommentaireUrl($commentaire['id_commentaire']); ?>"> Modifier</a>
+                    -
+                    <a href="<?php echo supprimerCommentaireUrl($commentaire['id_commentaire']); ?>">Supprimer</a>
+                </div>
                 <?php endif; ?>
             <?php endforeach; ?>
         <?php endif; ?>
