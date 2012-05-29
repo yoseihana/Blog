@@ -1,7 +1,7 @@
 <?php
 
 include 'modeles/commentairem.php';
-include 'modeles/Articlem.php';
+include 'modeles/Article.php';
 
 function modifier()
 {

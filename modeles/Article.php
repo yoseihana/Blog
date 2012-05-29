@@ -1,5 +1,7 @@
 <?php
 
+require_once 'AbstractModel.php';
+
 class Article extends AbstractModel
 {
     const TABLE = 'article';

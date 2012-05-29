@@ -12,16 +12,10 @@ final class DB
 
     private static $pdo;
 
-    // a = 5 b =& a  -> b pointe vers la même zone mémoire donc valeur que a même si a change de valeur
-    // http://be.php.net/manual/fr/language.references.whatdo.php
     public static function &getPdoInstance()
     {
 
-        // On passe par une variable locale (via référence) pour accèder à la variable statique
-        // juste pour "préciser" le type de la veleur retour. Ici PDO;
-        // Comme c'est une référence, on a pas besoin de faire l'assignation inverse.
         $conn =& self::$pdo;
-        // self:: pour acceder à des constantes dans la class
 
         if ($conn)
         {

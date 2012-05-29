@@ -1,15 +1,8 @@
 <?php
-/**
- * Created by JetBrains PhpStorm.
- * User: annabelle
- * Date: 21/05/12
- * Time: 18:03
- * To change this template use File | Settings | File Templates.
- */
 
-require_once'./config/DB.php';
+require_once './config/DB.php';
 
-class AbstractModel
+abstract class AbstractModel
 {
     protected $connection;
 
@@ -19,71 +12,72 @@ class AbstractModel
     }
 
     /**
-     * Préparation et exécution d'un PDOStatement
-     * @param $request
-     * @param array|null $parametres
+     * Cette fonction pépare et exécute un PDOStatement
+     * @param string $request - La requête SQL
+     * @param array|null $parameters  - Les paramètres de la requête SQL [optional]
      * @return bool
      */
-    protected function execute($request, array $parametres = NULL)
+    protected final function execute($request, array $parameters = NULL)
     {
         try
         {
             $statement = $this->connection->prepare($request);
-            return $statement->execute($parametres);
-        }
-        catch (PDOException $e)
+            return $statement->execute($parameters);
+        } catch (PDOException $e)
         {
-            $this->_PDOGestionException($e);
+            $this->_PDOExceptionHandling($e);
         }
     }
 
     /**
-     * Prépare, execute et collecte les résultats
-     * @param $request
-     * @param array|null $parametres
+     * Cette fonction pépare, exécute et collecte tout les résultats d'un PDOStatement
+     * @param string $request - La requête SQL
+     * @param array $parameters - Les paramètres de la requête SQL [optional]
      * @return array
      */
-    protected function fetchAll($request, array $parametres = NULL)
+    protected final function fetchAll($request, array $parameters = NULL)
     {
         try
         {
             $statement = $this->connection->prepare($request);
-            $statement->execute($parametres);
-            return $statement->fetchAll();
-        }
-        catch (PDOException $e)
-        {
-            $this->_PDOGestionException($e);
-        }
-    }
+            $statement->execute($parameters);
 
-    /** Prépare, excéute et collecte le résultat
-     * @param $request
-     * @param array|null $parametres
-     * @return mixed
-     */
-    protected function fetch($request, array $parametres = NULL)
-    {
-        try
+            return $statement->fetchAll();
+        } catch (PDOException $e)
         {
-            $statement = $this->connection->prepare($request);
-            $statement->execute($parametres);
-            return $statement->fetch();
-        }
-        catch (PDOException $e)
-        {
-            $this->_PDOGestionException($e);
+            $this->_PDOExceptionHandling($e);
         }
     }
 
     /**
-     * Comment le PDOException sera géré
+     * Cette fonction pépare, exécute et collecte un seul résultat d'un PDOStatement
+     * @param string $request - La requête SQL
+     * @param array $parameters - Les paramètres de la requête SQL [optional]
+     * @return mixed
+     */
+    protected final function fetch($request, array $parameters = NULL)
+    {
+        try
+        {
+            $statement = $this->connection->prepare($request);
+            $statement->execute($parameters);
+
+            return $statement->fetch();
+        } catch (PDOException $e)
+        {
+            $this->_PDOExceptionHandling($e);
+        }
+    }
+
+    /**
+     * Cette méthode privée gère la manière dont une PDOException doit être traitée.
+     * Le but de cette méthode est du refactoring pure
      * @param PDOException $e
      */
-    private function _PDOGestionException(PDOException $e)
+    private function _PDOExceptionHandling(PDOException $e)
     {
-        //Annulation de la transaction si il y en a une
-        if ($this->connection()->inTransaction())
+        // D'abord on annule la transaction, s'il y a.
+        if ($this->connection->inTransaction())
         {
             $this->connection->rollBack();
         }
