@@ -69,7 +69,7 @@
 
         <?php //include('liens.php'); ?>
 
-        <?php //include('categorie.php') ?>
+        <?php //include('Categoriem.php') ?>
 
         <!--</div>
         <!-- FIN colonneDroite -->

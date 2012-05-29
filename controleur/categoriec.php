@@ -1,7 +1,7 @@
 <?php
 
-include 'modeles/article.php';
-include 'modeles/categorie.php';
+include 'modeles/Articlem.php';
+include 'modeles/Categoriem.php';
 
 function lister()
 {

@@ -1,6 +1,6 @@
 <?php
 
-include 'modeles/article.php';
+include 'modeles/Article.php';
 include 'modeles/commentaire.php';
 
 function lister()
