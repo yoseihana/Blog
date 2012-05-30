@@ -9,6 +9,8 @@ class Article extends AbstractModel
     const TITRE = 'titre';
     const DATE_PARUTION = 'date_parution';
     const ARTICLE = 'article';
+    const NB_COM = 'nb_commentaire';
+    const IMAGE = 'image';
 
     function __construct()
     {
@@ -20,7 +22,7 @@ class Article extends AbstractModel
      * @param $pagination
      * @return array
      */
-    function getAllArticles($pagination)
+    function getArticles($pagination)
     {
 
         $req = 'SELECT * FROM ' . self::TABLE . ' ORDER BY ' . self::DATE_PARUTION . ' DESC LIMIT ' . $pagination . ',5';
@@ -49,12 +51,12 @@ class Article extends AbstractModel
      * @param $id_auteur
      * @return bool
      */
-    function deleteArticle($id_auteur)
+    function delete($id_auteur)
     {
 
         $req = 'DELETE FROM a' . self::TABLE . ' WHERE ' . self::ID . '= :id_article';
         $param = Array(
-            ':id_article' => self::ID
+            ':id_article' => $id_auteur
         );
 
         return $this->execute($req, $param);
@@ -65,7 +67,7 @@ class Article extends AbstractModel
      * @param array $data
      * @return bool
      */
-    function updateArticle(array $data)
+    function update(array $data)
     {
 
         $req = 'UPDATE ' . self::TABLE . ' SET ' . self::TITRE . '= :titre,' . self::ARTICLE . '= :article WHERE ' . self::ID . '= :id_article';
@@ -77,19 +79,42 @@ class Article extends AbstractModel
         return $this->execute($req, $param);
     }
 
+    public function addUpdateComment(array $data)
+    {
+        $req = 'UPDATE ' . self::TABLE . ' SET ' . self::NB_COM . ' = :nb_commentaire + 1 WHERE ' . self::ID . ' = :id_article';
+        $param = array(
+            ':nb_commentaire' => $data[self::NB_COM],
+            ':id_article'     => $data[self::ID]
+        );
+
+        return $this->execute($req, $param);
+    }
+
+    public function deletUpdateComment(array $data)
+    {
+        $req = 'UPDATE ' . self::TABLE . ' SET ' . self::NB_COM . ' = :nb_commentaire - 1 WHERE ' . self::ID . ' = :id_article';
+        $param = array(
+            ':nb_commentaire' => $data[self::NB_COM],
+            ':id_article'     => $data[self::ID]
+        );
+
+        return $this->execute($req, $param);
+    }
+
     /**
      * Ajout d'un article
      * @param array $data
      * @return bool
      */
-    function addArticle(array $data)
+    function add(array $data)
     {
 
-        $req = 'INSERT INTO ' . self::ARTICLE . ' VALUES ( null, :titre, :article, :date_parution, 0)';
+        $req = 'INSERT INTO ' . self::ARTICLE . ' VALUES ( null, :titre, :article, :date_parution, 0 , :image)';
         $param = Array(
             ':titre'        => $data[self::TITRE],
             ':article'      => $data[self::ARTICLE],
-            ':date_parution'=> $data[self::DATE_PARUTION]
+            ':date_parution'=> $data[self::DATE_PARUTION],
+            ':image'        => $data[self::IMAGE]
         );
         return $this->execute($req, $param);
 
@@ -113,6 +138,8 @@ class Article extends AbstractModel
     function countArticle()
     {
         $req = 'SELECT COUNT(*) AS total FROM ' . self::ARTICLE;
-        return $this->fetch($req);
+        $totaleArticles = $this->fetch($req);
+
+        return $totaleArticles;
     }
 }

@@ -4,13 +4,13 @@
         <div class="article">
             <div class="comment">
                 <p class="lien">
-                    <a href="<?php echo voirArticleUrl($article['id_article'], 'comments'); ?>"/>Il y
-                    a <?php echo $article['nb_commentaire']; ?> commentaire(s)</a>
+                    <a href="<?php echo Url::voirArticle($article[Article::ID], 'comments'); ?>"/>Il y
+                    a <?php echo $article[Article::NB_COM]; ?> commentaire(s)</a>
                 </p>
             </div>
 
             <h1>
-                <a href="<?php echo voirArticleUrl($article['id_article']); ?>"><?php echo $article['titre']; ?></a>
+                <a href="<?php echo Url::voirArticle($article[Article::ID]); ?>"><?php echo $article[Article::TITRE]; ?></a>
             </h1>
 
             <p class="post">
@@ -22,21 +22,21 @@
             </p>
 
             <div class="lien">
-                <?php if ($connected): ?>
-                <a href="<?php echo modifierArticleUrl($article['id_article']); ?>">Modifier</a>
+                <?php if (true): ?>
+                <a href="<?php echo Url::modifierArticle($article[Article::ID]); ?>">Modifier</a>
                 -
-                <a href="<?php echo supprimerArticleUrl($article['id_article']); ?>">Supprimer</a>
+                <a href="<?php echo Url::supprimerArticle($article[Article::ID]); ?>">Supprimer</a>
                 -
-                <a href="<?php echo ajouterArticleUrl(); ?>">Ajouter
+                <a href="<?php echo Url::ajouterArticle(); ?>">Ajouter
                     un article</a>
                 <?php endif; ?>
             </div>
             <div class="lecture">
-                <a href="<?php echo voirArticleUrl($article['id_article']); ?>">Lire la suite</a>
+                <a href="<?php echo Url::voirArticle($article[Article::ID]); ?>">Lire la suite</a>
             </div>
             <div class="comment">
                 <p class="lien">
-                    <a href="<?php echo ajouterCommentaireUrl(); ?>">Poster un commentaire</a>
+                    <a href="<?php echo Url::ajouterCommentaire(); ?>">Poster un commentaire</a>
                 </p>
             </div>
         </div>

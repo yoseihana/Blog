@@ -1,150 +1,149 @@
 <?php
 
-include 'modeles/commentairem.php';
-include 'modeles/Article.php';
+require_once 'AbstractController.php';
+require_once './modeles/Article.php';
+require_once './modeles/Comment.php';
 
-function modifier()
+final class CommentaireController extends AbstractController
 {
-    global $a, $c;
 
-    // Récupère l'isbn depuis $_REQUEST avec gestion d'erreurs
-    $id_commentaire = _getIdcommentaireFromRequest();
+    private $article;
+    private $comment;
 
-    // Test l'existance de l'isbn dans la DB
-    _testIdcommentaire($id_commentaire);
-
-    // POST - modifier le livre en DB
-    // GET - données pour le formulaire
-    if ($_SERVER['REQUEST_METHOD'] == 'POST')
+    function __construct()
     {
-        $champs['commentaire']['id_commentaire'] = $id_commentaire;
-        $champs['commentaire']['nom_auteur'] = $_POST['nom_auteur'];
-        $champs['commentaire']['texte'] = $_POST['texte'];
-
-        updateComment($champs);
-
-        $id_article = $_POST['id_article'];
-
-        header('Location:' . voirArticleUrl($id_article, 'comments')); // donne la page index.php qui est par défaut
-    }
-    elseif ($_SERVER['REQUEST_METHOD'] == 'GET')
-    {
-        $commentaire = findCommentById($id_commentaire);
-
-        $data['view_title'] = 'Modification du commentaire: ' . $commentaire['nom_auteur'];
-        $data['commentaire'] = $commentaire; // Le livre à modifier
-
-        $html = $a . $c . '.php';
-        return array('data' => $data, 'html' => $html);
-    }
-}
-
-function ajouter()
-{
-    global $a, $c;
-
-    if ($_SERVER['REQUEST_METHOD'] == 'POST')
-    {
-        $champs['commentaire']['nom_auteur'] = $_POST['nom_auteur'];
-        $champs['commentaire']['texte'] = $_POST['texte'];
-        $champs['commentaire']['date'] = date('Y-m-d');
-
-        $champs['commentaire']['id_article'] = $_POST['id_article'];
-
-        addComment($champs);
-
-        // Redirection
-        header('Location:' . voirArticleUrl($_POST['id_article'], 'comments')); // donne la page index.php qui est par défaut
-    }
-    elseif ($_SERVER['REQUEST_METHOD'] == 'GET')
-    {
-        $id_article = _getIdarticleFromRequest();
-
-        $data['view_title'] = 'Ajout d\'un commentaire';
-        $data['article']['id_article'] = $id_article;
-
-        $html = $a . $c . '.php';
-        return array('data' => $data, 'html' => $html); // returne
-    }
-}
-
-function supprimer()
-{
-    global $a, $c;
-
-    $id_commentaire = _getIdcommentaireFromRequest();
-    _testIdcommentaire($id_commentaire);
-
-    if ($_SERVER['REQUEST_METHOD'] == 'POST')
-    {
-
-        deleteComment($id_commentaire);
-
-        header('Location:' . listerArticleUrl());
-    }
-    elseif ($_SERVER['REQUEST_METHOD'] == 'GET')
-    {
-
-        $commentaire = findCommentById($id_commentaire);
-
-        $data['view_title'] = 'Suppression du commentaire ' . $commentaire['nom_auteur'];
-        $data['commentaire'] = $commentaire;
-
-        $html = $a . $c . '.php';
-        return array('data' => $data, 'html' => $html);
-    }
-}
-
-function voir()
-{
-    global $a, $c;
-
-    $id_commentaire = _getIdcommentaireFromRequest();
-    _testIdcommentaire($id_commentaire);
-
-    $commentaire = findCommentById($id_commentaire);
-
-    $data['view_title'] = 'Commentaire de ' . $commentaire['nom_auteur'];
-    $data['commentaire'] = $commentaire;
-    $data['article']['id_article'] = findArticleById($commentaire['id_article']);
-
-    $html = $a . $c . '.php';
-
-    return array('data' => $data, 'html' => $html);
-}
-
-function _getIdcommentaireFromRequest()
-{
-    global $a;
-
-    if (!isset($_REQUEST['id_commentaire']))
-    {
-        die('Vous devez fournir un id commentaire pour ' . $a . ' un commentaire');
-        //header('Location:index.php?c=error&a=e_404');
+        $this->article = new Article();
+        $this->comment = new Comment();
     }
 
-    return $_REQUEST['id_commentaire'];
-}
-
-function _getIdArticleFromRequest()
-{
-    global $a;
-
-    if (!isset($_REQUEST['id_article']))
+    public static function getDefaultAction()
     {
-        die('Vous devez fournir un id article pour ' . $a . ' un commentaire');
-        //header('Location:index.php?c=error&a=e_404');
+        return 'lister';
     }
 
-    return $_REQUEST['id_article'];
-}
-
-
-function _testIdcommentaire($id_commentaire)
-{
-    if (countCommentById($id_commentaire) < 1)
+    public function lister()
     {
-        die('L\'id commentaire fourni n\'existe pas dans la base de données');
-        //header('Location:index.php?c=error&a=e_404');
+        $id_article = $this->getParameter('id_article');
+        $this->isIdArticleExist($id_article);
+
+        $data = array(
+            'view_title' => 'Les commentaires',
+            'commentaire'=> $this->comment->findCommentByIdArticle($id_article),
+        );
+
+        return array('data'=> $data, 'html'=> MainController::getLastViewFileName());
+    }
+
+    public function modifier()
+    {
+        $id_commentaire = $this->getParameter('id_commentaire');
+        $this->isIdCommentaireExist($id_commentaire);
+
+        if ($this->isPost())
+        {
+            $commentaire = array(
+                Comment::NOM  => $this->getParameter('nom'),
+                Comment::DATE => date(d, m, Y),
+                Comment::TEXT => $this->getParameter('text')
+            );
+
+            $this->comment->updated($commentaire);
+        }
+        elseif ($this->isGet())
+        {
+            $commentaire = $this->comment->findCommentById($id_commentaire);
+
+            $data = array(
+                'view_title' => "Modifier le commentaire de " . $commentaire[Comment::NOM],
+                'commentaire'=> $commentaire
+            );
+
+            return array('data'=> $data, 'html'=> MainController::getLastViewFileName());
+        }
+    }
+
+    public function ajouter()
+    {
+        $id_article = $this->getParameter('id_article');
+        $this->isIdArticleExist($id_article);
+
+        if ($this->isPost())
+        {
+            $commentaire = array(
+                Comment::DATE      => date(d, m, Y),
+                Comment::NOM       => $this->getParameter('nom'),
+                Comment::TEXT      => $this->getParameter('text'),
+                Comment::ID_ARTICLE=> $id_article
+            );
+
+            $nb_commentaire = array(
+                Article::NB_COM => $this->getParameter('nb_commentaire') + 1
+            );
+
+            DB::getPdoInstance()->beginTransaction();
+            $this->comment->add($commentaire);
+            $this->article->addUpdateComment($nb_commentaire);
+            DB::getPdoInstance()->commit();
+
+            header('Location: ' . Url::voirArticle($this->getParameter('id_article')));
+
+        }
+        elseif ($this->isGet())
+        {
+            $data = array(
+                'view_title'=> 'Ajouter un commentaire',
+            );
+
+            return array('data'=> $data, 'html'=> MainController::getLastViewFileName());
+        }
+    }
+
+    public function supprimer()
+    {
+        $id_commentaire = $this->getParameter('id_commentaire');
+        $this->isIdCommentaireExist($id_commentaire);
+
+        $id_article = $this->getParameter('id_article');
+        $this->isIdArticleExist($id_article);
+
+        if ($this->isPost())
+        {
+            DB::getPdoInstance()->beginTransaction();
+            $this->comment->delete($id_commentaire);
+            $this->article->deletUpdateComment($id_article);
+            DB::getPdoInstance()->commit();
+
+            header('Location: ' . Url::voirArticle($this->getParameter('id_article')));
+        }
+        elseif ($this->isGet())
+        {
+            $commentaire = $this->comment->findCommentById($id_commentaire);
+
+            $data = array(
+                'view_title' => 'Suppression du commentaire ' . $commentaire,
+                'commentaire'=> $commentaire
+            );
+
+            return array('data'=> $data, 'html'=> MainController::getLastViewFileName());
+        }
+    }
+
+    public function isIdArticleExist($id_article)
+    {
+        if (count($this->article->countArticleById($id_article) < 1))
+        {
+            die('L\'id article fourni n\'existe pas dans notre base de donnée');
+        }
+
+        return true;
+    }
+
+    public function isIdCommentaireExist($id_commentaire)
+    {
+        if (count($this->comment->countCommentById($id_commentaire)))
+        {
+            die('L\'id commentaire fourni n\'existe pas dans notre base de données');
+        }
+        return true;
     }
 }

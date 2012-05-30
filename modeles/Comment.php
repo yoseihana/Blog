@@ -22,7 +22,7 @@ class Comment extends AbstractModel
         parent::__construct();
     }
 
-    function findCommentByIdArticle($id_article)
+    public function findCommentByIdArticle($id_article)
     {
         $req = 'SELECT * FROM ' . self::TABLE . ' WHERE ' . self::ID_ARTICLE . ' = :id_article';
         $param = array(
@@ -32,7 +32,17 @@ class Comment extends AbstractModel
         return $this->fetch($req, $param);
     }
 
-    function delete($id_commentaire)
+    public function findCommentById($id_commentaire)
+    {
+        $req = 'SELECT * FROM ' . self::TABLE . ' WHERE ' . self::ID_COMMENTAIRE . ' = :id_commentaire';
+        $param = array(
+            ':id_commentaire'=> $id_commentaire
+        );
+
+        return $this->fetch($req, $param);
+    }
+
+    public function delete($id_commentaire)
     {
         $req = 'DELETE FROM ' . self::TABLE . ' WHERE ' . self::ID_COMMENTAIRE . ' = :id_commentaire';
         $param = array(
@@ -42,7 +52,12 @@ class Comment extends AbstractModel
         return $this->execute($req, $param);
     }
 
-    function updated(array $data)
+    public function deleteByArticle($id_article)
+    {
+
+    }
+
+    public function updated(array $data)
     {
         $req = 'UPDATE ' . self::TABLE . ' SET ' . self::NOM . ' = :nom_auteur, ' . self::TEXT . ' = :texte WHERE ' . self::ID_COMMENTAIRE . ' = :id_commentaire';
         $param = array(
@@ -54,7 +69,7 @@ class Comment extends AbstractModel
         return $this->execute($req, $param);
     }
 
-    function add(array $data)
+    public function add(array $data)
     {
         $req = 'INSERT INTO ' . self::TABLE . ' VALUE ( null, :nom_auteur, :texte, :date, :id_article)';
         $param = array(
@@ -68,7 +83,7 @@ class Comment extends AbstractModel
 
     }
 
-    function countCommentById($id_commentaire)
+    public function countCommentById($id_commentaire)
     {
         $req = 'SELECT count(' . self::ID_COMMENTAIRE . ') AS nb_id_commentaire FROM ' . self::TABLE . ' WHERE ' . self::ID_COMMENTAIRE . '= :id_commentaire';
         $param = array(

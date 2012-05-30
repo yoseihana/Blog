@@ -11,13 +11,13 @@ class Categorie extends AbstractModel
         parent::__construct();
     }
 
-    function getAll()
+    public function getAll()
     {
         $req = 'SELECT * FROM ' . self::TABLE . ' ORDER BY ' . self::CATEGORIE;
         return $this->fetchAll($req);
     }
 
-    function findCategorieById($id_categorie)
+    public function findCategorieById($id_categorie)
     {
 
         $req = 'SELECT * FROM ' . self::TABLE . ' WHERE ' . self::ID . ' = :id_categorie';
@@ -27,7 +27,21 @@ class Categorie extends AbstractModel
         return $this->fetch($req, $param);
     }
 
-    function delete($id_categorie)
+    public function findByArticle($id_article)
+    {
+        $req = 'SELECT c.* FROM ' . self::TABLE . ' as c
+                JOIN ' . Written::TABLE . ' as e
+                ON c.' . self::ID . ' = e.' . Written::ID_CATEGORIE . '
+                WHERE e.' . Written::ID_ARTICLE . ' = :id_article';
+
+        $param = array(
+            ':id_article'=> $id_article
+        );
+
+        return $this->execute($req, $param);
+    }
+
+    public function delete($id_categorie)
     {
         $req = 'DELETE FROM ' . self::TABLE . ' WHERE ' . self::ID . '= :id_categorie';
         $param = array(
@@ -36,7 +50,7 @@ class Categorie extends AbstractModel
         return $this->execute($req, $param);
     }
 
-    function update(array $data)
+    public function update(array $data)
     {
         $req = 'UPDATE ' . self::TABLE . ' SET ' . self::ID . '= :id_categorie, ' . self::CATEGORIE . '= :categorie WHERE ' . self::ID . '= :id_categorie';
         $param = array(
@@ -46,7 +60,7 @@ class Categorie extends AbstractModel
         return $this->execute($req, $param);
     }
 
-    function add(array $data)
+    public function add(array $data)
     {
         $req = 'INSERT INTO ' . self::TABLE . ' VALUES ( :id_categorie, :categorie)';
         $param = array(
@@ -57,7 +71,7 @@ class Categorie extends AbstractModel
 
     }
 
-    function countCategorieById($id_categorie)
+    public function countCategorieById($id_categorie)
     {
         $req = 'SELECT count(' . self::ID . ') AS nb_id_categorie FROM ' . self::TABLE . ' WHERE ' . self::ID . '= :id_categorie'; // récupère le nbre d'isbn
         $param = array(

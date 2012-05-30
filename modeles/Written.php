@@ -47,6 +47,16 @@ final class Written extends AbstractModel
         return self::execute($req, $param);
     }
 
+    public function deleteAllByIdArticle($id_article)
+    {
+        $req = 'DELETE FROM ' . self::TABLE . ' WHERE ' . self::ID_ARTICLE . ' = :id_article';
+        $param = array(
+            ':id_article'=> $id_article
+        );
+
+        return self::execute($req, $param);
+    }
+
     public function add($data)
     {
         $req = 'INSERT INTO ' . self::TABLE . ' VALUES (:id_article, :id_categorie)';
