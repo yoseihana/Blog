@@ -53,11 +53,11 @@ final class ArticleController extends AbstractController
         $premiereEntree = ($pageActuelle - 1) * 3;
 
         $data = array(
-            'view_title'=> 'Tous les articles',
-            'articles'  => $this->article->getArticles($premiereEntree),
-            'nbPage'    => $nombrePages
+            'view_title' => 'Tous les articles',
+            'articles'   => $this->article->getAll($premiereEntree),
+            'categories' => $this->categorie->getAll(),
+            'nbPage'     => $nombrePages
         );
-        echo'hello';
         return array('data'=> $data, 'html'=> MainController::getLastViewFileName());
     }
 
@@ -68,8 +68,10 @@ final class ArticleController extends AbstractController
         $article = $this->article->findArticleById($id_article);
 
         $data = array(
-            'view_title' => $article[Article::TITRE],
-            'article'    => $article
+            'view_title'  => $article[Article::TITRE],
+            'article'     => $article,
+            'categories'  => $this->categorie->getAll(),
+            'commentaires'=> $this->comment->findCommentByIdArticle($id_article)
         );
 
         return array('data'=> $data, 'html'=> MainController::getLastViewFileName());
@@ -82,21 +84,22 @@ final class ArticleController extends AbstractController
 
         if ($this->isPost())
         {
-
             $article = array(
                 Article::TITRE        => $this->getParameter('titre'),
                 Article::ARTICLE      => $this->getParameter('article'),
-                Article::DATE_PARUTION=> date(d, m, Y),
+                Article::DATE_PARUTION=> date('Y-m-d'),
+                Article::IMAGE        => NULL,
+                Article::ID           => $this->getParameter('id_article')
             );
 
             $ecritDelete = array(
                 Written::ID_ARTICLE   => $id_article,
-                Written::ID_CATEGORIE => $_POST['id_actegorie2']
+                Written::ID_CATEGORIE => $_POST['id_categorie']
             );
 
             $ecritAdd = array(
                 Written::ID_ARTICLE   => $id_article,
-                Written::ID_CATEGORIE => $this->getParameter('id_article')
+                Written::ID_CATEGORIE => $this->getParameter('id_categorie')
             );
 
             DB::getPdoInstance()->beginTransaction();
@@ -111,11 +114,11 @@ final class ArticleController extends AbstractController
         elseif ($this->isGet())
         {
             $article = $this->article->findArticleById($id_article);
-            $categorie = $this->categorie->findByArticle($id_article);
+            $categorie = $this->categorie->getAll();
             $data = array(
-                'view_title'=> 'Modification de l\'article "' . $article[Article::TITRE],
-                'article'   => $article,
-                'categorie' => $categorie
+                'view_title' => 'Modification de l\'article "' . $article[Article::TITRE],
+                'article'    => $article,
+                'categories' => $categorie
             );
 
             return array('data'=> $data, 'html'=> MainController::getLastViewFileName());
@@ -126,16 +129,17 @@ final class ArticleController extends AbstractController
     {
         if ($this->isPost())
         {
+
             $article = array(
-                Article::DATE_PARUTION => date(d, m, Y),
+                Article::DATE_PARUTION => date('Y-m-d'),
                 Article::TITRE         => $this->getParameter('titre'),
                 Article::ARTICLE       => $this->getParameter('article'),
                 Article::IMAGE         => NULL
             );
-
+            var_dump(Article::ID);
             $ecrit = array(
                 Written::ID_ARTICLE   => $this->getParameter('id_article'),
-                Written::ID_CATEGORIE => $this->getParameter('id_article')
+                Written::ID_CATEGORIE => $this->getParameter('id_categorie')
             );
 
             DB::getPdoInstance()->beginTransaction();
@@ -143,7 +147,8 @@ final class ArticleController extends AbstractController
             $this->written->add($ecrit);
             DB::getPdoInstance()->commit();
 
-            header('Location: ' . Url::voirArticle($this->getParameter('id_article')));
+            //header('Location: ' . Url::voirArticle($this->getParameter('id_article')));
+            header('Location: ' . Url::listerArticle());
         }
         elseif ($this->isGet())
         {
@@ -183,10 +188,9 @@ final class ArticleController extends AbstractController
         }
     }
 
-    private
-    function isIdArticleExist($id_article)
+    private function isIdArticleExist($id_article)
     {
-        if ($this->article->countArticleById($id_article))
+        if ($this->article->coutById($id_article) < 1)
         {
             die('L\'id "' . $id_article . '" n\'existe pas dans la base de données');
         }

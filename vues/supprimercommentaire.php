@@ -7,16 +7,18 @@
         <fieldset>
             <h2> Auteur:</h2>
 
-            <p class="post"> <?php echo ($view['data']['commentaire']['nom_auteur']); ?> </p>
-            </br>
+            <p class="post"> <?php echo ($view['data']['commentaire'][Comment::NOM]); ?> </p>
+            <br/>
+
             <h2> Commentaire:</h2>
 
-            <p class="post"> <?php echo ($view['data']['commentaire']['texte']); ?> </p>
+            <p class="post"> <?php echo ($view['data']['commentaire'][Comment::TEXT]); ?> </p>
 
-            <input type="hidden" name="c" value="<?php echo ($validControllers['commentaire']); ?>"/>
-            <input type="hidden" name="a" value="<?php echo ($validActions['supprimer']); ?>"/>
+            <input type="hidden" name="c" value="<?php echo (MainController::getLastController()); ?>"/>
+            <input type="hidden" name="a" value="<?php echo (MainController::getLastAction()); ?>"/>
             <input type="hidden" name="id_commentaire"
-                   value="<?php echo ($view['data']['commentaire']['id_commentaire']); ?>"/>
+                   value="<?php echo ($view['data']['commentaire'][Comment::ID_COMMENTAIRE]); ?>"/>
+            <input type="hidden" name="id_article" value="<?php echo ($view['data']['article'][Article::ID]); ?>"/>
 
             <input type="submit" value="Supprimer"/>
         </fieldset>

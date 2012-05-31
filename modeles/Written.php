@@ -9,7 +9,7 @@
 require_once 'AbstractModel.php';
 final class Written extends AbstractModel
 {
-    const TABLE = 'ecrit';
+    const TABLE = 'ecrire';
     const ID_ARTICLE = 'id_article';
     const ID_CATEGORIE = 'id_categorie';
 

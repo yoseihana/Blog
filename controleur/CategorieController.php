@@ -33,23 +33,25 @@ final class CategorieController extends AbstractController
 
     function modifier()
     {
-        $id_categorie = $this->getName('isbn');
+        $id_categorie = $this->getParameter('id_categorie');
         $this->isIdExist($id_categorie);
 
         if ($this->isPost())
         {
             $categorie = array(
                 Categorie::ID       => $id_categorie,
-                Categorie::CATEGORIE=> $_POST['id_article2']
+                Categorie::TITRE    => $this->getParameter('categorie')
             );
 
             $ecritDelete = array(
                 Written::ID_CATEGORIE => $id_categorie,
-                Written::ID_ARTICLE   => $this->getParameter('id_article')
+                Written::ID_ARTICLE   => $_POST['id_article2']
+
             );
 
             $ecritAdd = array(
-                Written::ID_CATEGORIE => $id_categorie
+                Written::ID_CATEGORIE => $id_categorie,
+                Written::ID_ARTICLE   => $this->getParameter('id_article')
             );
 
             DB::getPdoInstance()->beginTransaction();
@@ -63,9 +65,9 @@ final class CategorieController extends AbstractController
         }
         elseif ($this->isGet())
         {
-            $categorie = $this->categorie->getAll($id_categorie);
+            $categorie = $this->categorie->findCategorieById($id_categorie);
             $data = array(
-                'view_title'=> 'Modification de la catégorie ' . $categorie[Categorie::CATEGORIE],
+                'view_title'=> 'Modification de la catégorie ' . $categorie[Categorie::TITRE],
                 'categorie' => $categorie
             );
 
@@ -79,12 +81,12 @@ final class CategorieController extends AbstractController
         {
             $categorie = array(
                 Categorie::ID       => $this->getParameter('id_categorie'),
-                Categorie::CATEGORIE=> $this->getParameter('categorie')
+                Categorie::TITRE    => $this->getParameter('categorie')
             );
 
             $this->categorie->add($categorie);
 
-            header('Location: ' . Url::voirCategorie('id_categorie'));
+            header('Location: ' . Url::voirCategorie($this->getParameter('id_categorie')));
         }
         elseif ($this->isGet())
         {
@@ -97,7 +99,7 @@ final class CategorieController extends AbstractController
 
     function supprimer()
     {
-        $id_categorie = $this->getParameter('id_categore');
+        $id_categorie = $this->getParameter('id_categorie');
         $this->isIdExist($id_categorie);
 
         if ($this->isPost())
@@ -114,7 +116,7 @@ final class CategorieController extends AbstractController
         {
             $categorie = $this->categorie->findCategorieById($id_categorie);
             $data = array(
-                'view_title'=> 'Supprimer la catégorie: ' . $categorie[Categorie::CATEGORIE],
+                'view_title'=> 'Supprimer la catégorie: ' . $categorie[Categorie::TITRE],
                 'categorie' => $categorie
             );
 
@@ -130,8 +132,9 @@ final class CategorieController extends AbstractController
         $categorie = $this->categorie->findCategorieById($id_categorie);
 
         $data = array(
-            'view_title' => 'Catégorie ' . $categorie[Categorie::CATEGORIE],
-            'article'    => $this->article->findArticleByIdCategorie($id_categorie)
+            'view_title'  => 'Catégorie ' . $categorie[Categorie::TITRE],
+            'categorie'   => $categorie,
+            'articles'    => $this->article->findByCategorie($id_categorie),
         );
 
         return array('data'=> $data, 'html'=> MainController::getLastViewFileName());
@@ -139,7 +142,7 @@ final class CategorieController extends AbstractController
 
     function isIdExist($id_categorie)
     {
-        if ($this->categorie->countCategorieById($id_categorie) < 1)
+        if ($this->categorie->countById($id_categorie) < 1)
         {
             die('L\'id catégorie fourni n\'existe pas dans la base de données');
             //header('Location:index.php?c=error&a=e_404');
@@ -147,4 +150,6 @@ final class CategorieController extends AbstractController
 
         return true;
     }
+
+
 }

@@ -4,8 +4,8 @@
         <div class="article">
             <div class="comment">
                 <p class="lien">
-                    <a href="<?php echo Url::voirArticle($article[Article::ID], 'comments'); ?>"/>Il y
-                    a <?php echo $article[Article::NB_COM]; ?> commentaire(s)</a>
+                    <a href="<?php echo Url::voirArticle($article[Article::ID], 'comments'); ?>">Il y
+                        a <?php echo $article[Article::NB_COM]; ?> commentaire(s)</a>
                 </p>
             </div>
 
@@ -36,12 +36,13 @@
             </div>
             <div class="comment">
                 <p class="lien">
-                    <a href="<?php echo Url::ajouterCommentaire(); ?>">Poster un commentaire</a>
+                    <a href="<?php echo Url::ajouterCommentaire($article[Article::ID]); ?>">Poster un commentaire</a>
                 </p>
             </div>
         </div>
 
         <?php endforeach; ?>
+
     <?php endif; ?>
 
     <div class="pagination">
@@ -64,9 +65,9 @@
         </h1>
 
         <ul class="lien">
-            <?php foreach ($view['data']['article']['categories'] as $categorie): ?>
+            <?php foreach ($view['data']['categories'] as $categorie): ?>
             <li>
-                <?php echo $categorie['categorie']; ?>
+                <?php echo $categorie[Categorie::TITRE]; ?>
             </li>
             <?php endforeach; ?>
         </ul>

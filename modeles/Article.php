@@ -5,7 +5,7 @@ require_once 'AbstractModel.php';
 class Article extends AbstractModel
 {
     const TABLE = 'article';
-    const ID = ':id_article';
+    const ID = 'id_article';
     const TITRE = 'titre';
     const DATE_PARUTION = 'date_parution';
     const ARTICLE = 'article';
@@ -22,7 +22,7 @@ class Article extends AbstractModel
      * @param $pagination
      * @return array
      */
-    function getArticles($pagination)
+    public function getAll($pagination)
     {
 
         $req = 'SELECT * FROM ' . self::TABLE . ' ORDER BY ' . self::DATE_PARUTION . ' DESC LIMIT ' . $pagination . ',5';
@@ -35,7 +35,7 @@ class Article extends AbstractModel
      * @param $id_article
      * @return mixed
      */
-    function findArticleById($id_article)
+    public function findArticleById($id_article)
     {
 
         $req = 'SELECT * FROM ' . self::TABLE . ' WHERE ' . self::ID . ' = :id_article';
@@ -46,15 +46,29 @@ class Article extends AbstractModel
         return $this->fetch($req, $param);
     }
 
+    public function findByCategorie($id_categorie)
+    {
+        $req = 'SELECT a.* FROM ' . self::TABLE . ' as a JOIN '
+            . Written::TABLE . ' as e ON a.' . self::ID . ' = e.'
+            . Written::ID_ARTICLE . ' WHERE e.'
+            . Written::ID_CATEGORIE . ' = :id_categorie';
+
+        $param = array(
+            ':id_categorie'=> $id_categorie
+        );
+
+        return $this->fetchAll($req, $param);
+    }
+
     /**
      * Supression d'un article selon son ID
      * @param $id_auteur
      * @return bool
      */
-    function delete($id_auteur)
+    public function delete($id_auteur)
     {
 
-        $req = 'DELETE FROM a' . self::TABLE . ' WHERE ' . self::ID . '= :id_article';
+        $req = 'DELETE FROM ' . self::TABLE . ' WHERE ' . self::ID . '= :id_article';
         $param = Array(
             ':id_article' => $id_auteur
         );
@@ -67,14 +81,20 @@ class Article extends AbstractModel
      * @param array $data
      * @return bool
      */
-    function update(array $data)
+    public function update(array $data)
     {
 
-        $req = 'UPDATE ' . self::TABLE . ' SET ' . self::TITRE . '= :titre,' . self::ARTICLE . '= :article WHERE ' . self::ID . '= :id_article';
+        $req = 'UPDATE ' . self::TABLE . ' SET '
+            . self::TITRE . '= :titre, '
+            . self::ARTICLE . '= :article, '
+            . self::DATE_PARUTION . ' =:date_parution, '
+            . self::IMAGE . ' =:image WHERE ' . self::ID . '= :id_article';
         $param = Array(
-            ':titre'     => $data[self::TITRE],
-            ':article'   => $data[self::ARTICLE],
-            ':id_article'=> $data[self::ID]
+            ':titre'         => $data[self::TITRE],
+            ':article'       => $data[self::ARTICLE],
+            ':id_article'    => $data[self::ID],
+            ':date_parution' => $data[self::DATE_PARUTION],
+            ':image'         => $data[self::IMAGE]
         );
         return $this->execute($req, $param);
     }
@@ -106,16 +126,17 @@ class Article extends AbstractModel
      * @param array $data
      * @return bool
      */
-    function add(array $data)
+    public function add(array $data)
     {
-
         $req = 'INSERT INTO ' . self::ARTICLE . ' VALUES ( null, :titre, :article, :date_parution, 0 , :image)';
         $param = Array(
             ':titre'        => $data[self::TITRE],
             ':article'      => $data[self::ARTICLE],
             ':date_parution'=> $data[self::DATE_PARUTION],
-            ':image'        => $data[self::IMAGE]
+            ':image'        => $data[self::IMAGE],
         );
+
+
         return $this->execute($req, $param);
 
     }
@@ -125,7 +146,7 @@ class Article extends AbstractModel
      * @param $id_article
      * @return mixed
      */
-    function countArticleById($id_article)
+    public function coutById($id_article)
     {
         $req = 'SELECT count(' . self::ID . ') AS nb_id_article FROM ' . self::ARTICLE . ' WHERE ' . self::ID . '= :id_article'; // récupère le nbre d'isbn
         $param = Array(
@@ -135,7 +156,7 @@ class Article extends AbstractModel
         return $result['nb_id_article']; // retourne 0 ou 1
     }
 
-    function countArticle()
+    public function countArticle()
     {
         $req = 'SELECT COUNT(*) AS total FROM ' . self::ARTICLE;
         $totaleArticles = $this->fetch($req);

@@ -27,8 +27,8 @@ final class CommentaireController extends AbstractController
         $this->isIdArticleExist($id_article);
 
         $data = array(
-            'view_title' => 'Les commentaires',
-            'commentaire'=> $this->comment->findCommentByIdArticle($id_article),
+            'view_title'  => 'Les commentaires',
+            'commentaires'=> $this->comment->findCommentByIdArticle($id_article),
         );
 
         return array('data'=> $data, 'html'=> MainController::getLastViewFileName());
@@ -42,12 +42,15 @@ final class CommentaireController extends AbstractController
         if ($this->isPost())
         {
             $commentaire = array(
-                Comment::NOM  => $this->getParameter('nom'),
-                Comment::DATE => date(d, m, Y),
-                Comment::TEXT => $this->getParameter('text')
+                Comment::ID_COMMENTAIRE => $id_commentaire,
+                Comment::NOM            => $this->getParameter('nom'),
+                Comment::DATE           => date('Y, m, d'),
+                Comment::TEXT           => $this->getParameter('text')
             );
 
             $this->comment->updated($commentaire);
+
+            header('Location: ' . Url::voirArticle($this->getParameter('id_article')));
         }
         elseif ($this->isGet())
         {
@@ -70,7 +73,7 @@ final class CommentaireController extends AbstractController
         if ($this->isPost())
         {
             $commentaire = array(
-                Comment::DATE      => date(d, m, Y),
+                Comment::DATE      => date('Y-m-d'),
                 Comment::NOM       => $this->getParameter('nom'),
                 Comment::TEXT      => $this->getParameter('text'),
                 Comment::ID_ARTICLE=> $id_article
@@ -130,7 +133,7 @@ final class CommentaireController extends AbstractController
 
     public function isIdArticleExist($id_article)
     {
-        if (count($this->article->countArticleById($id_article) < 1))
+        if (count($this->article->coutById($id_article) < 1))
         {
             die('L\'id article fourni n\'existe pas dans notre base de donnée');
         }
@@ -140,7 +143,7 @@ final class CommentaireController extends AbstractController
 
     public function isIdCommentaireExist($id_commentaire)
     {
-        if (count($this->comment->countCommentById($id_commentaire)))
+        if (count($this->comment->countCommentById($id_commentaire)) < 1)
         {
             die('L\'id commentaire fourni n\'existe pas dans notre base de données');
         }

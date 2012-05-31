@@ -19,9 +19,9 @@
 
             </textarea>
 
-            <input type="hidden" name="c" value="<?php echo ($validControllers['commentaire']); ?>"/>
-            <input type="hidden" name="a" value="<?php echo ($validActions['ajouter']); ?>"/>
-            <input type="hidden" name="id_article" value="<?php echo ($view['data']['article']['id_article']); ?>"/>
+            <input type="hidden" name="c" value="<?php echo MainController::getLastController() ?>"/>
+            <input type="hidden" name="a" value="<?php echo MainController::getLastAction() ?>"/>
+            <input type="hidden" name="id_article" value="<?php echo ($view['data']['article'][Article::ID]); ?>"/>
 
             <div class="bouton">
                 <input type="submit" value="Ajouter"/>

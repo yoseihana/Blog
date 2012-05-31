@@ -11,6 +11,17 @@
             <br/>
             <input type="text" id="titre" name="titre" value="Titre"/>
             <br/>
+            <label for="categorie">
+                Catégorie :
+            </label>
+            <br/>
+            <select name="id_categorie" id="categorie">
+                <?php foreach ($view['data']['categorie'] as $categorie): ?>
+                <option <?php if ($categorie[Categorie::ID] == $categorie[Categorie::ID]): ?>selected="selected"<?php endif;?>
+                    value="<?php echo $categorie[Categorie::ID]; ?>"><?php echo $categorie[Categorie::TITRE] ?></option>
+                <?php endforeach; ?>
+            </select>
+            <br/>
             <label for="article">
                 Article:
             </label>
@@ -19,8 +30,9 @@
                 Votre article:
             </textarea>
 
-            <input type="hidden" name="c" value="<?php echo ($validControllers['article']); ?>"/>
-            <input type="hidden" name="a" value="<?php echo ($validActions['ajouter']); ?>"/>
+            <input type="hidden" name="c" value="<?php echo MainController::getLastController() ?>"/>
+            <input type="hidden" name="a" value="<?php echo MainController::getLastAction() ?>"/>
+            <input type="hidden" name="image" value="<?php echo $view['data']['article'][Article::IMAGE] ?>"/>
 
             <div class="bouton">
                 <input type="submit" value="Ajouter"/>

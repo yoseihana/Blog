@@ -29,7 +29,7 @@ class Comment extends AbstractModel
             ':id_article'=> $id_article
         );
 
-        return $this->fetch($req, $param);
+        return $this->fetchAll($req, $param);
     }
 
     public function findCommentById($id_commentaire)
@@ -54,7 +54,12 @@ class Comment extends AbstractModel
 
     public function deleteByArticle($id_article)
     {
+        $req = 'DELET FROM ' . self::TABLE . ' WHERE ' . self::ID_ARTICLE . ' = :id_article';
+        $param = array(
+            ':id_article' => $id_article
+        );
 
+        return $this->execute($req, $param);
     }
 
     public function updated(array $data)
@@ -75,7 +80,7 @@ class Comment extends AbstractModel
         $param = array(
             ':nom_auteur'=> $data[self::NOM],
             ':texte'     => $data[self::TEXT],
-            ':date'      => date(dj, m, Y),
+            ':date'      => date('j, m, Y'),
             ':id_article'=> $data[self::ID_ARTICLE]
         );
 

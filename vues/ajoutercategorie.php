@@ -9,18 +9,17 @@
                 ID catégorie:
             </label>
             <br/>
-            <input type="text" name="id_categorie" value="c1"/>
+            <input id='id_categorie' type="text" name="id_categorie" value="c1"/>
             <br/>
             <label for="categorie">
                 Catégorie:
             </label>
             <br/>
-            <input type="text" name="categorie" value="Apple"/>
+            <input id='categorie' type="text" name="categorie" value="Apple"/>
 
 
-            <input type="hidden" name="c" value="<?php echo ($validControllers['categorie']); ?>"/>
-            <input type="hidden" name="a" value="<?php echo ($validActions['ajouter']); ?>"/>
-            <input type="hidden" name="id_article" value="<?php echo ($view['data']['categorie']['id_categorie']); ?>"/>
+            <input type="hidden" name="c" value="<?php echo MainController::getLastController() ?>"/>
+            <input type="hidden" name="a" value="<?php echo MainController::getLastAction() ?>"/>
 
             <div class="bouton">
                 <input type="submit" value="Ajouter"/>

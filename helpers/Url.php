@@ -18,6 +18,7 @@ final class Url
         return $_SERVER['PHP_SELF'] . '?' . http_build_query(array_merge($p, $params));
     }
 
+    /*------------ARTICLE-------------*/
     public static function listerArticle()
     {
         return Url::build(ArticleController::getName(), 'lister');
@@ -43,6 +44,7 @@ final class Url
         return Url::build(ArticleController::getName(), 'ajouter');
     }
 
+    /*----------------CATEGORIE--------------*/
     public static function listerCategorie()
     {
         return Url::build(CategorieController::getName(), 'lister');
@@ -68,6 +70,7 @@ final class Url
         return Url::build(CategorieController::getName(), 'ajouter');
     }
 
+    /*---------------COMMENTAIRE--------------*/
     public static function ajouterCommentaire()
     {
         return Url::build(CommentaireController::getName(), 'ajouter');
