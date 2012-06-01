@@ -9,11 +9,13 @@ final class CommentaireController extends AbstractController
 
     private $article;
     private $comment;
+    private $categorie;
 
     function __construct()
     {
         $this->article = new Article();
         $this->comment = new Comment();
+        $this->categorie = new Categorie();
     }
 
     public static function getDefaultAction()
@@ -55,10 +57,12 @@ final class CommentaireController extends AbstractController
         elseif ($this->isGet())
         {
             $commentaire = $this->comment->findCommentById($id_commentaire);
+            $categorie = $this->categorie->getAll();
 
             $data = array(
                 'view_title' => "Modifier le commentaire de " . $commentaire[Comment::NOM],
-                'commentaire'=> $commentaire
+                'commentaire'=> $commentaire,
+                'categories' => $categorie
             );
 
             return array('data'=> $data, 'html'=> MainController::getLastViewFileName());

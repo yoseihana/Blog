@@ -1,5 +1,10 @@
 <div class="colonneGauche">
     <div class="article">
+        <div class="comment">
+            <p class="lien">
+                <a href="<?php echo Url::listerArticle(); ?>">Retour à la liste des articles</a>
+            </p>
+        </div>
         <h1 class="voir">
             <?php echo $view['data']['article'][Article::TITRE]; ?>
         </h1>
@@ -17,14 +22,16 @@
             <a href="<?php echo Url::modifierArticle($view['data']['article'][Article::ID]) ?>">Modifier</a>
             -
             <a href="<?php echo Url::supprimerArticle($view['data']['article'][Article::ID]) ?>">Supprimer</a>
-            -
-            <a href="<?php echo Url::ajouterArticle() ?>">Ajouter un article</a>
+        </div>
+        <div class="comment">
+            <p class="lien">
+                <a href="<?php echo Url::ajouterArticle() ?>">Ajouter un article</a>
+            </p>
         </div>
         <?php endif; ?>
     </div>
     <div class="article">
         <!--Liste des commentaires-->
-        <div id="comments"></div>
         <h1 class="voir">
             Commentaires
         </h1>
@@ -34,27 +41,25 @@
             <p class="post">
                 Poster le <?php echo $commentaire[Comment::DATE]; ?> par <?php echo $commentaire[Comment::NOM]; ?>
             </p>
-            <p>
+            <p class="commentaire">
                 <?php echo($commentaire[CommenT::TEXT]); ?>
             </p>
 
             <?php if (true): ?>
-                <div class="lien">
+                <div class="lien commentaire">
                     <a href="<?php echo Url::modifierCommentaire($commentaire[Comment::ID_COMMENTAIRE]); ?>">
                         Modifier</a>
                     -
                     <a href="<?php echo Url::supprimerCommentaire($commentaire[Comment::ID_COMMENTAIRE]); ?>">Supprimer</a>
                 </div>
+                <div class="comment">
+                    <p class="lien">
+                        <a href="<?php echo Url::ajouterCommentaire(); ?>">Poster un commentaire</a>
+                    </p>
+                </div>
                 <?php endif; ?>
             <?php endforeach; ?>
         <?php endif; ?>
-        <div class="comment">
-            <p class="lien">
-                <a href="<?php echo Url::ajouterCommentaire(); ?>">Ajouter
-                    un
-                    commentaire</a>
-            </p>
-        </div>
     </div>
 </div>
 
@@ -72,11 +77,11 @@
         <ul class="lien">
             <?php foreach ($view['data']['categories'] as $categorie): ?>
             <li>
-                <?php echo $categorie[Categorie::TITRE]; ?>
+                <a href="<?php echo Url::voirCategorie($categorie[Categorie::ID]); ?>"
+                   title="Voir al catégorie"><?php echo $categorie[Categorie::TITRE]; ?></a>
             </li>
             <?php endforeach; ?>
         </ul>
     </div>
+</div>
 
-</div>
-</div>

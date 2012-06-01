@@ -11,9 +11,9 @@ class Categorie extends AbstractModel
         parent::__construct();
     }
 
-    public function getAll()
+    public function getAll($pagination)
     {
-        $req = 'SELECT * FROM ' . self::TABLE . ' ORDER BY ' . self::TITRE;
+        $req = 'SELECT * FROM ' . self::TABLE . ' ORDER BY ' . self::TITRE . ' DESC LIMIT ' . $pagination . ',10';
         return $this->fetchAll($req);
     }
 
@@ -83,5 +83,13 @@ class Categorie extends AbstractModel
         $resultat = $this->fetch($req, $param);
 
         return $resultat['nb_id_categorie']; // retourne 0 ou 1
+    }
+
+    public function countCategorie()
+    {
+        $req = 'SELECT COUNT(*) AS total FROM ' . self::TABLE;
+        $totaleCategories = $this->fetch($req);
+
+        return $totaleCategories;
     }
 }

@@ -23,7 +23,7 @@ final class Written extends AbstractModel
      * @param $data
      * @return bool
      */
-    public function delete($data)
+    public function delete(array $data)
     {
         $req = 'DELETE FROM ' . self::TABLE
             . ' WHERE ' . self::ID_ARTICLE . ' =:id_article'
@@ -57,7 +57,7 @@ final class Written extends AbstractModel
         return self::execute($req, $param);
     }
 
-    public function add($data)
+    public function add(array $data)
     {
         $req = 'INSERT INTO ' . self::TABLE . ' VALUES (:id_article, :id_categorie)';
         $param = array(
@@ -65,6 +65,18 @@ final class Written extends AbstractModel
             'id_categorie'=> $data[self::ID_CATEGORIE]
         );
 
+        return $this->execute($req, $param);
+    }
+
+    public function update($id_categorie)
+    {
+        $req = 'UPDATE ' . self::TABLE .
+            'SET ' . self::ID_CATEGORIE . ' =:id_categorie
+            WHERE ' . $id_categorie . ' = :id_categorie';
+        $param = array(
+            ':id_categorie' => $data[self::ID_CATEGORIE]
+        );
+        var_dump($id_categorie);
         return $this->execute($req, $param);
     }
 }

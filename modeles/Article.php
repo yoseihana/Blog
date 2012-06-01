@@ -30,6 +30,7 @@ class Article extends AbstractModel
         return $this->fetchAll($req);
     }
 
+
     /**
      * Récupère un article selon son ID
      * @param $id_article

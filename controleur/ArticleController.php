@@ -153,8 +153,8 @@ final class ArticleController extends AbstractController
         elseif ($this->isGet())
         {
             $data = array(
-                'view_title'=> 'Ajouter un article',
-                'categorie' => $this->categorie->getAll()
+                'view_title' => 'Ajouter un article',
+                'categories' => $this->categorie->getAll()
             );
 
             return array('data'=> $data, 'html'=> MainController::getLastViewFileName());
@@ -179,9 +179,12 @@ final class ArticleController extends AbstractController
         elseif ($this->isGet())
         {
             $article = $this->article->findArticleById($id_article);
+            $categorie = $this->categorie->getAll();
+
             $data = array(
-                'view_title' => 'Supprimer l\'article: ' . $article[Article::TITRE],
-                'article'    => $article
+                'view_title'  => 'Supprimer l\'article: ' . $article[Article::TITRE],
+                'article'     => $article,
+                'categories'  => $categorie
             );
 
             return array('data'=> $data, 'html'=> MainController::getLastViewFileName());

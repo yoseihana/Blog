@@ -25,8 +25,28 @@ final class CategorieController extends AbstractController
 
     function lister()
     {
+
+        $totaleCategories = $this->categorie->countCategorie();
+        $nombrePages = ceil($totaleCategories['total'] / 3);
+
+        if (isset($_GET['page']))
+        {
+            $pageActuelle = intval($_GET['page']);
+
+            if ($pageActuelle > $nombrePages)
+            {
+                $pageActuelle = $nombrePages;
+            }
+        }
+        else
+        {
+            $pageActuelle = 1;
+        }
+
+        $premiereEntree = ($pageActuelle - 1) * 3;
         $data['view_title'] = 'Liste des catégories';
-        $data['categories'] = $this->categorie->getAll();
+        $data['categories'] = $this->categorie->getAll($premiereEntree);
+        $data['nbPage'] = $nombrePages;
 
         return array('data' => $data, 'html' => MainController::getLastViewFileName());
     }
@@ -40,24 +60,16 @@ final class CategorieController extends AbstractController
         {
             $categorie = array(
                 Categorie::ID       => $id_categorie,
-                Categorie::TITRE    => $this->getParameter('categorie')
+                Categorie::TITRE    => $this->getParameter('categorie'),
             );
 
-            $ecritDelete = array(
+            $modifier = array(
                 Written::ID_CATEGORIE => $id_categorie,
-                Written::ID_ARTICLE   => $_POST['id_article2']
-
-            );
-
-            $ecritAdd = array(
-                Written::ID_CATEGORIE => $id_categorie,
-                Written::ID_ARTICLE   => $this->getParameter('id_article')
             );
 
             DB::getPdoInstance()->beginTransaction();
             $this->categorie->update($categorie);
-            $this->written->delete($ecritDelete);
-            $this->written->add($ecritAdd);
+            $this->written->update($modifier);
             DB::getPdoInstance()->commit();
 
             header('Location: ' . Url::voirCategorie($this->getParameter('id_categorie')));
@@ -66,9 +78,10 @@ final class CategorieController extends AbstractController
         elseif ($this->isGet())
         {
             $categorie = $this->categorie->findCategorieById($id_categorie);
+
             $data = array(
                 'view_title'=> 'Modification de la catégorie ' . $categorie[Categorie::TITRE],
-                'categorie' => $categorie
+                'categorie' => $categorie,
             );
 
             return array('data'=> $data, 'html'=> MainController::getLastViewFileName());
@@ -90,8 +103,10 @@ final class CategorieController extends AbstractController
         }
         elseif ($this->isGet())
         {
+            $categorie = $this->categorie->getAll();
             $data = array(
-                'view_title'=> 'Ajouter une catégorie'
+                'view_title'=> 'Ajouter une catégorie',
+                'categories'=> $categorie
             );
             return array('data'=> $data, 'html'=> MainController::getLastViewFileName());
         }
@@ -117,7 +132,8 @@ final class CategorieController extends AbstractController
             $categorie = $this->categorie->findCategorieById($id_categorie);
             $data = array(
                 'view_title'=> 'Supprimer la catégorie: ' . $categorie[Categorie::TITRE],
-                'categorie' => $categorie
+                'categorie' => $categorie,
+                'categories'=> $this->categorie->getAll()
             );
 
             return array('data'=> $data, 'html'=> MainController::getLastViewFileName());
@@ -130,11 +146,13 @@ final class CategorieController extends AbstractController
         $this->isIdExist($id_categorie);
 
         $categorie = $this->categorie->findCategorieById($id_categorie);
+        $categories = $this->categorie->getAll();
 
         $data = array(
             'view_title'  => 'Catégorie ' . $categorie[Categorie::TITRE],
             'categorie'   => $categorie,
             'articles'    => $this->article->findByCategorie($id_categorie),
+            'categories'  => $categories
         );
 
         return array('data'=> $data, 'html'=> MainController::getLastViewFileName());

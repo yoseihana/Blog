@@ -36,7 +36,7 @@
             </div>
             <div class="comment">
                 <p class="lien">
-                    <a href="<?php echo Url::ajouterCommentaire($article[Article::ID]); ?>">Poster un commentaire</a>
+                    <a href="<?php echo Url::ajouterCommentaire(); ?>">Poster un commentaire</a>
                 </p>
             </div>
         </div>
@@ -67,7 +67,8 @@
         <ul class="lien">
             <?php foreach ($view['data']['categories'] as $categorie): ?>
             <li>
-                <?php echo $categorie[Categorie::TITRE]; ?>
+                <a href="<?php echo Url::voirCategorie($categorie[Categorie::ID]); ?>"
+                   title="Voir al catégorie"><?php echo $categorie[Categorie::TITRE]; ?></a>
             </li>
             <?php endforeach; ?>
         </ul>

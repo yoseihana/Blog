@@ -69,16 +69,18 @@ div.main {
     margin: 0 auto;
     width: 90%;
     max-width: 78em;
-    min-width: 54em;
+    min-width: 65em;
     margin-top: 2em;
 }
 
-a:link {
+a:link, a:visited {
     text-decoration: none;
+    color: #BA1155;
 }
 
 a:hover {
     text-decoration: underline;
+    color: #BA1155;
 }
 
 div#header {
@@ -163,6 +165,14 @@ div.content div.colonneGauche .article {
     text-decoration: none
 }
 
+.article h2 {
+    font-family: 'Bad Script', cursive;
+    color: #BA1155;
+    font-size: 1.4em;
+    margin: 0em 1em 0.5em 1em;
+    text-decoration: none;
+}
+
 .article h1:first-letter {
     text-transform: uppercase
 }
@@ -181,7 +191,7 @@ div.content div.colonneGauche .article {
 }
 
 .article .lecture {
-    margin: 2em 1em
+    margin: 1.5em 1em 1em 0;
 }
 
 .article .comment {
@@ -219,11 +229,11 @@ div.content div.colonneDroite .contenu {
 }
 
 .contenu .lien li {
-    margin: 1.5em 0;
+    margin: 1em 0;
 }
 
 .footer p {
-    color: white;
+    color: #BA1155;
     margin: 1em;
 }
 
@@ -240,6 +250,10 @@ form {
     margin-top: 2em;
     padding: 1em;
     background-color: white;
+}
+
+select, #modifierImg {
+    margin: 0.5em 0 1em 0;
 }
 
 div.lien {
@@ -270,4 +284,25 @@ h1.voir {
 
 .article input, .article textarea {
     margin: 0.5em 0 1em 0;
+}
+
+p.commentaire {
+    margin-left: 1em;
+}
+
+div.commentaire {
+    margin: 0.5em 0 1em 1em;
+}
+
+div.article h1.categorie {
+    margin-top: 1em;
+}
+
+div.article ul {
+    margin-bottom: 1em;
+}
+
+div.article li {
+    list-style: disc;
+    margin-left: 1em;
 }

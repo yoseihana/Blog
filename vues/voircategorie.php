@@ -1,6 +1,11 @@
 <div class='colonneGauche'>
     <div class="article">
-        <h1>
+        <div class="comment">
+            <p class="lien">
+                <a href="<?php echo Url::listerCategorie(); ?>">Retour à la liste des catégorie</a>
+            </p>
+        </div>
+        <h1 class="categorie">
             <?php echo $view['data']['categorie'][Categorie::TITRE]; ?>
         </h1>
         <ul>
@@ -22,5 +27,19 @@
     <!-- FIN contenu -->
 
     <?php include('liens.php'); ?>
+    <div class="contenu">
+        <h1>
+            Catégories
+        </h1>
+
+        <ul class="lien">
+            <?php foreach ($view['data']['categories'] as $categorie): ?>
+            <li>
+                <a href="<?php echo Url::voirCategorie($categorie[Categorie::ID]); ?>"
+                   title="Voir al catégorie"><?php echo $categorie[Categorie::TITRE]; ?></a>
+            </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
 
 </div>
