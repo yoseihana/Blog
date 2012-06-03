@@ -4,7 +4,7 @@
         <div class="article">
             <div class="comment">
                 <p class="lien">
-                    <a href="<?php echo Url::voirArticle($article[Article::ID], 'comments'); ?>">Il y
+                    <a href="<?php echo Url::voirCommentaire($article[Article::ID], 'comments'); ?>">Il y
                         a <?php echo $article[Article::NB_COM]; ?> commentaire(s)</a>
                 </p>
             </div>

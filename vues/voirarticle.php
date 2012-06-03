@@ -12,7 +12,7 @@
         <p class="post">
             Poster le <?php echo $view['data']['article'][Article::DATE_PARUTION] ?>
             par Anna dans "<a href="<?php echo Url::voirCategorie($view['data']['categorie'][Categorie::ID]); ?>"
-                              title="Voir la catéhorie"><?php echo $view['data']['categorie'][Categorie::ID]; ?></a>"
+                              title="Voir la catéhorie"><?php echo $view['data']['categorie'][Categorie::TITRE]; ?></a>"
         </p>
 
         <p>
@@ -31,39 +31,61 @@
         </div>
         <?php endif; ?>
     </div>
-    <div class="article">
+    <div class="article" id="ancreCommentaire">
         <!--Liste des commentaires-->
         <h1 class="voir">
             Commentaires
         </h1>
-
-        <?php if (count($view['data']['article'][Article::NB_COM]) > 0): ?>
         <?php foreach ($view['data']['commentaires'] as $commentaire): ?>
-            <p class="post">
-                Poster le <?php echo $commentaire[Comment::DATE]; ?> par <?php echo $commentaire[Comment::NOM]; ?>
-            </p>
-            <p class="commentaire">
-                <?php echo($commentaire[CommenT::TEXT]); ?>
-            </p>
+        <p class="post">
+            Poster le <?php echo $commentaire[Comment::DATE]; ?> par <?php echo $commentaire[Comment::NOM]; ?>
+        </p>
+        <p class="commentaire">
+            <?php echo($commentaire[CommenT::TEXT]); ?>
+        </p>
 
-            <?php if (true): ?>
-                <div class="lien commentaire">
-                    <a href="<?php echo Url::modifierCommentaire($commentaire[Comment::ID_COMMENTAIRE]); ?>">
-                        Modifier</a>
-                    -
-                    <a href="<?php echo Url::supprimerCommentaire($commentaire[Comment::ID_COMMENTAIRE]); ?>">Supprimer</a>
-                </div>
-                <div class="comment">
-                    <p class="lien">
-                        <a href="<?php echo Url::ajouterCommentaire(); ?>">Poster un commentaire</a>
-                    </p>
-                </div>
-                <?php endif; ?>
-            <?php endforeach; ?>
-        <?php endif; ?>
+        <?php if (true): ?>
+            <div class="lien commentaire">
+                <a href="<?php echo Url::modifierCommentaire($commentaire[Comment::ID_COMMENTAIRE]); ?>">
+                    Modifier</a>
+                -
+                <a href="<?php echo Url::supprimerCommentaire($commentaire[Comment::ID_COMMENTAIRE]); ?>">Supprimer</a>
+            </div>
+            <?php endif; ?>
+        <?php endforeach; ?>
     </div>
-</div>
+    <div class="article">
+        <h1>
+            Ajouter un commentaire
+        </h1>
 
+        <form action="<?php echo ($_SERVER['PHP_SELF']) ?>" method="post">
+            <fieldset>
+                <label for="nom_auteur">
+                    Nom:
+                </label>
+                <br/>
+                <input type="text" id="nom_auteur" name="nom_auteur" value="Nom"/>
+                <br/>
+                <label for="texte">
+                    Texte:
+                </label>
+                <br/>
+                <textarea cols="65" id="texte" name="texte" rows="15">
+                </textarea>
+
+                <div class="bouton">
+                    <input type="submit" value="Ajouter"/>
+                </div>
+            </fieldset>
+            <input type="hidden" name="c" value="<?php echo CommentaireController::getName() ?>"/>
+            <input type="hidden" name="a" value="ajouter"/>
+            <input type="hidden" name="id_article" value="<?php echo ($view['data']['article'][Article::ID]); ?>"/>
+
+        </form>
+    </div>
+
+</div>
 <div class="colonneDroite">
     <?php include('apropos.php'); ?>
     <!-- FIN contenu -->

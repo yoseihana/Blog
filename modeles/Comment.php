@@ -10,12 +10,12 @@ require_once 'AbstractModel.php';
 
 class Comment extends AbstractModel
 {
+    const TABLE = 'commentaire';
     const ID_COMMENTAIRE = 'id_commentaire';
     const NOM = 'nom_auteur';
     const TEXT = 'texte';
     const DATE = 'date';
     const ID_ARTICLE = 'id_article';
-    const TABLE = 'commentaire';
 
     function __construct()
     {
@@ -56,19 +56,19 @@ class Comment extends AbstractModel
     {
         $req = 'DELETE FROM ' . self::TABLE . ' WHERE ' . self::ID_ARTICLE . ' = :id_article';
         $param = array(
-            ':id_article' => $id_article
+            ':id_article'=> $id_article
         );
-
         return $this->execute($req, $param);
     }
 
     public function updated(array $data)
     {
-        $req = 'UPDATE ' . self::TABLE . ' SET ' . self::NOM . ' = :nom_auteur, ' . self::TEXT . ' = :texte WHERE ' . self::ID_COMMENTAIRE . ' = :id_commentaire';
+        $req = 'UPDATE ' . self::TABLE . ' SET ' . self::NOM . ' = :nom_auteur, ' . self::TEXT . ' = :texte, ' . self::DATE . ' = :date WHERE ' . self::ID_COMMENTAIRE . ' = :id_commentaire';
         $param = array(
             ':nom_auteur'    => $data[self::NOM],
             ':texte'         => $data[self::TEXT],
-            ':id_commentaire'=> $data[self::ID_COMMENTAIRE]
+            ':id_commentaire'=> $data[self::ID_COMMENTAIRE],
+            ':date'          => date('Y-m-d')
         );
 
         return $this->execute($req, $param);
@@ -80,7 +80,7 @@ class Comment extends AbstractModel
         $param = array(
             ':nom_auteur'=> $data[self::NOM],
             ':texte'     => $data[self::TEXT],
-            ':date'      => date('j, m, Y'),
+            ':date'      => date('Y-m-d'),
             ':id_article'=> $data[self::ID_ARTICLE]
         );
 

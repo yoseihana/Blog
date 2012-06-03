@@ -26,7 +26,8 @@
             <input type="hidden" name="a" value="<?php echo (MainController::getLastAction()); ?>"/>
             <input type="hidden" name="id_commentaire"
                    value="<?php echo ($view['data']['commentaire'][Comment::ID_COMMENTAIRE]); ?>"/>
-            <input type="hidden" name="id_article" value="<?php echo ($view['data']['article'][Article::ID]); ?>"/>
+            <input type="hidden" name="id_article"
+                   value="<?php echo ($view['data']['commentaire'][Comment::ID_ARTICLE]); ?>"/>
         </form>
     </div>
 </div>

@@ -12,13 +12,6 @@
                             la catégorie</a>
                     </p>
                 </div>
-                <label for="id_categorie">
-                    ID categorie:
-                </label>
-                <br/>
-                <input type="text" id="id_categorie" name="id_categorie"
-                       value="<?php echo ($view['data']['categorie'][Categorie::ID]); ?>"/>
-                <br/>
                 <label for="categorie">
                     Catégorie:
                 </label>

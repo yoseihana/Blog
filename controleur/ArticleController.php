@@ -34,7 +34,7 @@ final class ArticleController extends AbstractController
     public function lister()
     {
         $totaleArticles = $this->article->countArticle();
-        $nombrePages = ceil($totaleArticles['total'] / 3);
+        $nombrePages = ceil($totaleArticles['total'] / 10);
 
         if (isset($_GET['page']))
         {
@@ -50,13 +50,14 @@ final class ArticleController extends AbstractController
             $pageActuelle = 1;
         }
 
-        $premiereEntree = ($pageActuelle - 1) * 3;
+        $premiereEntree = ($pageActuelle - 1) * 10;
 
         $data = array(
             'view_title' => 'Tous les articles',
             'articles'   => $this->article->getAll($premiereEntree),
             'categories' => $this->categorie->getAllCategorie(),
-            'nbPage'     => $nombrePages
+            'nbPage'     => $nombrePages,
+
         );
         return array('data'=> $data, 'html'=> MainController::getLastViewFileName());
     }
@@ -169,7 +170,6 @@ final class ArticleController extends AbstractController
         if ($this->isPost())
         {
             DB::getPdoInstance()->beginTransaction();
-            $this->written->deleteAllByIdArticle($id_article);
             $this->comment->deleteByArticle($id_article);
             $this->article->delete($id_article);
             DB::getPdoInstance()->commit();

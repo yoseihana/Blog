@@ -46,7 +46,6 @@ final class CommentaireController extends AbstractController
             $commentaire = array(
                 Comment::ID_COMMENTAIRE => $id_commentaire,
                 Comment::NOM            => $this->getParameter('nom'),
-                Comment::DATE           => date('Y, m, d'),
                 Comment::TEXT           => $this->getParameter('text')
             );
 
@@ -77,20 +76,12 @@ final class CommentaireController extends AbstractController
         if ($this->isPost())
         {
             $commentaire = array(
-                Comment::DATE      => date('Y-m-d'),
-                Comment::NOM       => $this->getParameter('nom'),
-                Comment::TEXT      => $this->getParameter('text'),
+                Comment::NOM       => $this->getParameter('nom_auteur'),
+                Comment::TEXT      => $this->getParameter('texte'),
                 Comment::ID_ARTICLE=> $id_article
             );
 
-            $nb_commentaire = array(
-                Article::NB_COM => $this->getParameter('nb_commentaire') + 1
-            );
-
-            DB::getPdoInstance()->beginTransaction();
             $this->comment->add($commentaire);
-            $this->article->addUpdateComment($nb_commentaire);
-            DB::getPdoInstance()->commit();
 
             header('Location: ' . Url::voirArticle($this->getParameter('id_article')));
 
@@ -112,14 +103,10 @@ final class CommentaireController extends AbstractController
         $id_commentaire = $this->getParameter('id_commentaire');
         $this->isIdCommentaireExist($id_commentaire);
 
-        $id_article = $this->getParameter('id_article');
-        $this->isIdArticleExist($id_article);
-
         if ($this->isPost())
         {
             DB::getPdoInstance()->beginTransaction();
             $this->comment->delete($id_commentaire);
-            $this->article->deletUpdateComment($id_article);
             DB::getPdoInstance()->commit();
 
             header('Location: ' . Url::voirArticle($this->getParameter('id_article')));

@@ -33,8 +33,11 @@
                 </label>
                 <br/>
                 <textarea id="article" cols="60" name="article" rows="15">
-                    Votre article:
                 </textarea>
+
+                <p>
+                    Vous pouvez utiliser les balises HTML pour avoir une structure du code
+                </p>
 
                 <div class="bouton">
                     <input type="submit" value="Ajouter"/>

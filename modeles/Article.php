@@ -24,8 +24,12 @@ class Article extends AbstractModel
      */
     public function getAll($pagination)
     {
-
-        $req = 'SELECT * FROM ' . self::TABLE . ' ORDER BY ' . self::DATE_PARUTION . ' DESC LIMIT ' . $pagination . ',5';
+        $req = 'SELECT a.*, count(c.' . Comment::ID_COMMENTAIRE . ') AS ' . self::NB_COM .
+            ' FROM ' . self::TABLE .
+            ' AS a LEFT JOIN ' . Comment::TABLE .
+            ' AS c ON a.' . self::ID . ' = c.' . Comment::ID_ARTICLE .
+            ' GROUP BY a.' . self::ID .
+            ' DESC LIMIT ' . $pagination . ',10';
 
         return $this->fetchAll($req);
     }
@@ -46,6 +50,7 @@ class Article extends AbstractModel
     {
 
         $req = 'SELECT * FROM ' . self::TABLE . ' WHERE ' . self::ID . ' = :id_article';
+
         $param = Array(
             ':id_article' => $id_article
         );
@@ -106,28 +111,6 @@ class Article extends AbstractModel
         return $this->execute($req, $param);
     }
 
-    public function addUpdateComment(array $data)
-    {
-        $req = 'UPDATE ' . self::TABLE . ' SET ' . self::NB_COM . ' = :nb_commentaire + 1 WHERE ' . self::ID . ' = :id_article';
-        $param = array(
-            ':nb_commentaire' => $data[self::NB_COM],
-            ':id_article'     => $data[self::ID]
-        );
-
-        return $this->execute($req, $param);
-    }
-
-    public function deletUpdateComment(array $data)
-    {
-        $req = 'UPDATE ' . self::TABLE . ' SET ' . self::NB_COM . ' = :nb_commentaire - 1 WHERE ' . self::ID . ' = :id_article';
-        $param = array(
-            ':nb_commentaire' => $data[self::NB_COM],
-            ':id_article'     => $data[self::ID]
-        );
-
-        return $this->execute($req, $param);
-    }
-
     /**
      * Ajout d'un article
      * @param array $data
@@ -135,7 +118,7 @@ class Article extends AbstractModel
      */
     public function add(array $data)
     {
-        $req = 'INSERT INTO ' . self::ARTICLE . ' VALUES ( null, :titre, :article, :date_parution, 0 , :image)';
+        $req = 'INSERT INTO ' . self::ARTICLE . ' VALUES ( null, :titre, :article, :date_parution, :image)';
         $param = Array(
             ':titre'        => $data[self::TITRE],
             ':article'      => $data[self::ARTICLE],

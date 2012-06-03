@@ -67,15 +67,4 @@ final class Written extends AbstractModel
 
         return $this->execute($req, $param);
     }
-
-    public function update($id_categorie)
-    {
-        $req = 'UPDATE ' . self::TABLE .
-            'SET ' . self::ID_CATEGORIE . ' =:id_categorie
-            WHERE ' . $id_categorie . ' = :id_categorie';
-        $param = array(
-            ':id_categorie' => $data[self::ID_CATEGORIE]
-        );
-        return $this->execute($req, $param);
-    }
 }

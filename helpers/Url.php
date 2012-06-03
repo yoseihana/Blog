@@ -71,6 +71,11 @@ final class Url
     }
 
     /*---------------COMMENTAIRE--------------*/
+    public static function voirCommentaire($id_article)
+    {
+        return Url::build(ArticleController::getName(), 'voir', array('id_article' => $id_article)) . '#ancreCommentaire';
+    }
+
     public static function ajouterCommentaire($id_article)
     {
         return Url::build(CommentaireController::getName(), 'ajouter', array('id_article'=> $id_article));

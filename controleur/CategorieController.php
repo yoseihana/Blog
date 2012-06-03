@@ -67,14 +67,7 @@ final class CategorieController extends AbstractController
                 Categorie::TITRE    => $this->getParameter('categorie'),
             );
 
-            $modifier = array(
-                Written::ID_CATEGORIE => $id_categorie,
-            );
-
-            DB::getPdoInstance()->beginTransaction();
             $this->categorie->update($categorie);
-            $this->written->update($modifier);
-            DB::getPdoInstance()->commit();
 
             header('Location: ' . Url::voirCategorie($this->getParameter('id_categorie')));
 
