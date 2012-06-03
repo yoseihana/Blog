@@ -2,11 +2,14 @@
     <p>
         Annabelle BUFFART 2285 - INPRES 2012
     </p>
-    <?php if (true): ?>
-    <p><a href="index.php?c=membre&a=deconnecter">Se déconnecter</a></p>
+    <?php if (!MainController::isAuthenticated()): ?>
+    <p>
+        <a href="<?php echo Url::connexionMembre(); ?>">Connexion</a> - Annabelle Buffart - Mai 2012
+    </p>
     <?php else: ?>
-    <p><a href="index.php?a=connecter&c=membre">Se connecter</a></p>
-    <?php endif ?>
-
+    <p>
+        <a href="<?php echo Url::deconnexionMembre(); ?>">Deconnexion</a> - Annabelle Buffart - Mai 2012
+    </p>
+    <?php endif; ?>
 
 </div>

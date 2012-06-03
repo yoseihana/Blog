@@ -195,7 +195,8 @@ final class ArticleController extends AbstractController
     {
         if ($this->article->countById($id_article) < 1)
         {
-            die('L\'id "' . $id_article . '" n\'existe pas dans la base de données');
+            Erreur::erreurId();
+            //die('L\'id "' . $id_article . '" n\'existe pas dans la base de données');
         }
 
         return true;

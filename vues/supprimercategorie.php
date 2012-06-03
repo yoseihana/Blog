@@ -12,6 +12,7 @@
                             la catégories</a>
                     </p>
                 </div>
+                <?php if (MainController::isAuthenticated()): ?>
                 <h2>
                     Titre:
                 </h2>
@@ -21,6 +22,11 @@
                 <div class="bouton">
                     <input type="submit" value="Supprimer"/>
                 </div>
+                <?php else: ?>
+                <p>
+                    Vous devez vous connecter pour supprimer une catégorie.
+                </p>
+                <?php endif; ?>
             </fieldset>
             <input type="hidden" name="c" value="<?php echo (MainController::getLastController()); ?>"/>
             <input type="hidden" name="a" value="<?php echo (MainController::getLastAction()); ?>"/>

@@ -42,35 +42,12 @@ class Comment extends AbstractModel
         return $this->fetch($req, $param);
     }
 
-    public function delete($id_commentaire)
-    {
-        $req = 'DELETE FROM ' . self::TABLE . ' WHERE ' . self::ID_COMMENTAIRE . ' = :id_commentaire';
-        $param = array(
-            ':id_commentaire'=> $id_commentaire
-        );
-
-        return $this->execute($req, $param);
-    }
-
     public function deleteByArticle($id_article)
     {
         $req = 'DELETE FROM ' . self::TABLE . ' WHERE ' . self::ID_ARTICLE . ' = :id_article';
         $param = array(
             ':id_article'=> $id_article
         );
-        return $this->execute($req, $param);
-    }
-
-    public function updated(array $data)
-    {
-        $req = 'UPDATE ' . self::TABLE . ' SET ' . self::NOM . ' = :nom_auteur, ' . self::TEXT . ' = :texte, ' . self::DATE . ' = :date WHERE ' . self::ID_COMMENTAIRE . ' = :id_commentaire';
-        $param = array(
-            ':nom_auteur'    => $data[self::NOM],
-            ':texte'         => $data[self::TEXT],
-            ':id_commentaire'=> $data[self::ID_COMMENTAIRE],
-            ':date'          => date('Y-m-d')
-        );
-
         return $this->execute($req, $param);
     }
 

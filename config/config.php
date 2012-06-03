@@ -22,5 +22,3 @@ $validExtentions = array(
     'gif');
 
 $upload_dir = './img';
-
-$connected = TRUE; // remettre à false quand la connexion sera ok

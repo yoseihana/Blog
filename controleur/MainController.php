@@ -15,6 +15,7 @@ abstract class MainController
 {
     const DEFAULT_CONTROLLER = 'def_controller';
     const DEFAULT_ACTION = 'def_action';
+    const SESSION_CONNECTED = 'connected';
 
     private static $lastController;
     private static $lastAction;
@@ -39,7 +40,8 @@ abstract class MainController
 
         if (!class_exists($lastControllerClass, false))
         {
-            die('Aucun controller existe pour "' . self::$lastController . '".');
+            Erreur::erreurControllerExiste();
+            //die('Aucun controller existe pour "' . self::$lastController . '".');
         }
 
         //Changement, passe d'un string à un objet instancier de la dernière classe
@@ -48,7 +50,8 @@ abstract class MainController
         // Check if controller class name (above) is a valid controller (extends AbstractController)
         if (!($lastControllerClass instanceof AbstractController))
         {
-            die('Pas de controller valide pour "' . self::$lastController . '".');
+            Erreur::erreurController();
+            //die('Pas de controller valide pour "' . self::$lastController . '".');
         }
 
         // Retrieve all valid action for the given controller
@@ -60,7 +63,8 @@ abstract class MainController
         // Check if requested action is available for the requested controller
         if (!in_array(self::getLastAction(), $availableActions))
         {
-            die ('Pas d\'action "' . self::$lastAction . '" pour le controller "' . self::$lastController . '"');
+            Erreur::erreurAction();
+            //die ('Pas d\'action "' . self::$lastAction . '" pour le controller "' . self::$lastController . '"');
         }
 
         // Call the requested method from the requested controller  /!\ Trés important!
@@ -85,4 +89,8 @@ abstract class MainController
         return strtolower(self::$lastAction . self::$lastController . '.php');
     }
 
+    public static function isAuthenticated()
+    {
+        return isset($_SESSION[self::SESSION_CONNECTED]) ? $_SESSION[self::SESSION_CONNECTED] : false;
+    }
 }

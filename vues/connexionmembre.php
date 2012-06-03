@@ -11,27 +11,21 @@
                         <a href="<?php echo Url::listerCategorie(); ?>">Retour à la liste des catégories</a>
                     </p>
                 </div>
-                <?php if (MainController::isAuthenticated()): ?>
-                <label for="id_categorie">
-                    ID catégorie:
+                <label for="mail">
+                    Email:
                 </label>
                 <br/>
-                <input id='id_categorie' type="text" name="id_categorie" value="catApple"/>
+                <input id='mail' type="text" name="mail" value=""/>
                 <br/>
-                <label for="categorie">
-                    Catégorie:
+                <label for="mdp">
+                    Mot de passe:
                 </label>
                 <br/>
-                <input id='categorie' type="text" name="categorie" value="Apple"/>
+                <input id='mdp' type="text" name="mdp" value=""/>
 
                 <div class="bouton">
                     <input type="submit" value="Ajouter"/>
                 </div>
-                <?php else: ?>
-                <p>
-                    Vous devez vous connecter pour ajouter un article.
-                </p>
-                <?php endif; ?>
             </fieldset>
             <input type="hidden" name="c" value="<?php echo MainController::getLastController() ?>"/>
             <input type="hidden" name="a" value="<?php echo MainController::getLastAction() ?>"/>

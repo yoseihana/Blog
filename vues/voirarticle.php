@@ -18,7 +18,7 @@
         <p>
             <?php echo $view['data']['article'][Article::ARTICLE] ?>
         </p>
-        <?php if (true): ?>
+        <?php if (MainController::isAuthenticated()): ?>
         <div class="lien">
             <a href="<?php echo Url::modifierArticle($view['data']['article'][Article::ID]) ?>">Modifier</a>
             -
@@ -43,15 +43,6 @@
         <p class="commentaire">
             <?php echo($commentaire[CommenT::TEXT]); ?>
         </p>
-
-        <?php if (true): ?>
-            <div class="lien commentaire">
-                <a href="<?php echo Url::modifierCommentaire($commentaire[Comment::ID_COMMENTAIRE]); ?>">
-                    Modifier</a>
-                -
-                <a href="<?php echo Url::supprimerCommentaire($commentaire[Comment::ID_COMMENTAIRE]); ?>">Supprimer</a>
-            </div>
-            <?php endif; ?>
         <?php endforeach; ?>
     </div>
     <div class="article">
@@ -107,4 +98,3 @@
         </ul>
     </div>
 </div>
-

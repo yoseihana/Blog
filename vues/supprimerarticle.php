@@ -12,12 +12,17 @@
                             l'article</a>
                     </p>
                 </div>
+                <?php if (MainController::isAuthenticated()): ?>
                 <h2> <?php echo ($view['data']['article'][Article::TITRE]); ?> </h2>
 
                 <p class="post"> <?php echo ($view['data']['article']['article']); ?> </p>
 
                 <input type="submit" value="Supprimer"/>
-                <br/>
+                <?php else: ?>
+                <p>
+                    Vous devez vous connecter pour supprimer un article.
+                </p>
+                <?php endif; ?>
             </fieldset>
             <input type="hidden" name="c" value="<?php echo (MainController::getLastController()); ?>"/>
             <input type="hidden" name="a" value="<?php echo (MainController::getLastAction()); ?>"/>

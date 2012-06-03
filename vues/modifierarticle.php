@@ -1,6 +1,5 @@
 <div class="colonneGauche">
     <div class="article">
-        <?php if (true): ?>
         <h1>
             <?php echo $view['data']['view_title']; ?>
         </h1>
@@ -13,6 +12,7 @@
                             l'article</a>
                     </p>
                 </div>
+                <?php if (MainController::isAuthenticated()): ?>
                 <label for="titre">
                     Titre:
                 </label>
@@ -52,6 +52,11 @@
                 <div class="bouton">
                     <input type="submit" value="Modifier"/>
                 </div>
+                <?php else: ?>
+                <p>
+                    Vous devez vous connecter pour modifier un article.
+                </p>
+                <?php endif; ?>
             </fieldset>
             <input type="hidden" name="c" value="<?php echo MainController::getLastController() ?>"/>
             <input type="hidden" name="a" value="<?php echo MainController::getLastAction() ?>"/>
@@ -60,9 +65,6 @@
             <input type="hidden" name="id_categorie2"
                    value="<?php echo $view['data']['categories'][Categorie::ID] ?>"/>
         </form>
-        <? else: ?>
-        <p>Vous devez vous connectez pour modifier un article</p>
-        <?php endif; ?>
     </div>
 </div>
 

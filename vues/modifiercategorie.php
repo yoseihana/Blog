@@ -12,6 +12,7 @@
                             la catégorie</a>
                     </p>
                 </div>
+                <?php if (MainController::isAuthenticated()): ?>
                 <label for="categorie">
                     Catégorie:
                 </label>
@@ -23,6 +24,11 @@
                 <div class="bouton">
                     <input type="submit" value="Modifier"/>
                 </div>
+                <?php else: ?>
+                <p>
+                    Vous devez vous connecter pour modifier une catégorie.
+                </p>
+                <?php endif; ?>
             </fieldset>
             <input type="hidden" name="c" value="<?php echo MainController::getLastController() ?>"/>
             <input type="hidden" name="a" value="<?php echo MainController::getLastAction() ?>"/>

@@ -4,7 +4,7 @@
         <div class="article">
             <div class="comment">
                 <p class="lien">
-                    <a href="<?php echo Url::voirCommentaire($article[Article::ID], 'comments'); ?>">Il y
+                    <a href="<?php echo Url::voirCommentaire($article[Article::ID], 'ancreCommentaire'); ?>">Il y
                         a <?php echo $article[Article::NB_COM]; ?> commentaire(s)</a>
                 </p>
             </div>
@@ -22,7 +22,7 @@
             </p>
 
             <div class="lien">
-                <?php if (true): ?>
+                <?php if (MainController::isAuthenticated()): ?>
                 <a href="<?php echo Url::modifierArticle($article[Article::ID]); ?>">Modifier</a>
                 -
                 <a href="<?php echo Url::supprimerArticle($article[Article::ID]); ?>">Supprimer</a>
@@ -33,7 +33,8 @@
             </div>
             <div class="comment">
                 <p class="lien">
-                    <a href="<?php echo Url::ajouterCommentaire($article[Article::ID]); ?>">Poster un commentaire</a>
+                    <a href="<?php echo Url::voirCommentaire($article[Article::ID], 'ajouterComment'); ?>">Poster un
+                        commentaire</a>
                 </p>
             </div>
         </div>

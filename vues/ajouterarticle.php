@@ -11,6 +11,7 @@
                         <a href="<?php echo Url::listerArticle(); ?>">Retour à la liste des articles</a>
                     </p>
                 </div>
+                <?php if (MainController::isAuthenticated()): ?>
                 <label for="titre">
                     Titre:
                 </label>
@@ -42,6 +43,11 @@
                 <div class="bouton">
                     <input type="submit" value="Ajouter"/>
                 </div>
+                <?php else: ?>
+                <p>
+                    Vous devez vous connecter pour ajouter un article.
+                </p>
+                <?php endif; ?>
             </fieldset>
             <input type="hidden" name="c" value="<?php echo MainController::getLastController() ?>"/>
             <input type="hidden" name="a" value="<?php echo MainController::getLastAction() ?>"/>

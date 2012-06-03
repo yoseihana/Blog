@@ -15,9 +15,11 @@
             </li>
             <?php endforeach; ?>
         </ul>
+        <?php if (MainController::isAuthenticated()): ?>
         <a href="<?php echo Url::modifierCategorie($view['data']['categorie'][Categorie::ID]) ?>">Modifier</a>
         -
         <a href="<?php echo Url::supprimerCategorie($view['data']['categorie'][Categorie::ID]) ?>">Supprimer</a>
+        <?php endif; ?>
     </div>
 </div>
 <div class="colonneDroite">

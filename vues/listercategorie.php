@@ -1,15 +1,15 @@
 <div class="colonneGauche">
     <?php foreach ($view['data']['categories'] as $categorie): ?>
-        <div class="article">
-            <h1 class="categorie">
-                <a href="<?php echo Url::voirCategorie($categorie[Categorie::ID]) ?>"><?php echo $categorie[Categorie::TITRE]; ?></a>
-            </h1>
-    <?php if (true): ?>
+    <div class="article">
+        <h1 class="categorie">
+            <a href="<?php echo Url::voirCategorie($categorie[Categorie::ID]) ?>"><?php echo $categorie[Categorie::TITRE]; ?></a>
+        </h1>
+        <?php if (MainController::isAuthenticated()): ?>
         <a href="<?php echo Url::modifierCategorie($categorie[Categorie::ID]) ?>">Modifier</a>
         -
         <a href="<?php echo Url::supprimerCategorie($categorie[Categorie::ID]) ?>">Supprimer</a>
-        </div>
-         <?php endif; ?>
+        <?php endif; ?>
+    </div>
     <?php endforeach; ?>
 
     <div class="pagination">

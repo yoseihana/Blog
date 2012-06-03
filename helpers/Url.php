@@ -6,6 +6,11 @@
  * Time: 18:00
  * To change this template use File | Settings | File Templates.
  */
+require_once './controleur/ArticleController.php';
+require_once './controleur/CategorieController.php';
+require_once './controleur/CommentaireController.php';
+require_once './controleur/MembreController.php';
+
 final class Url
 {
     private static function build($controller, $action, array $params = array())
@@ -78,7 +83,7 @@ final class Url
 
     public static function ajouterCommentaire($id_article)
     {
-        return Url::build(CommentaireController::getName(), 'ajouter', array('id_article'=> $id_article));
+        return Url::build(CommentaireController::getName(), 'ajouter', array('id_article'=> $id_article)) . '#ajouterComment';
     }
 
     public static function supprimerCommentaire($id_commentaire)
@@ -89,5 +94,15 @@ final class Url
     public static function modifierCommentaire($id_commentaire)
     {
         return Url::build(CommentaireController::getName(), 'modifier', array('id_commentaire'=> $id_commentaire));
+    }
+
+    public static function connexionMembre()
+    {
+        return Url::build(MembreController::getName(), 'connexion');
+    }
+
+    public static function deconnexionMembre()
+    {
+        return Url::build(MembreController::getName(), 'deconnexion');
     }
 }
