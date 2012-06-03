@@ -57,7 +57,7 @@ final class CommentaireController extends AbstractController
         elseif ($this->isGet())
         {
             $commentaire = $this->comment->findCommentById($id_commentaire);
-            $categorie = $this->categorie->getAll();
+            $categorie = $this->categorie->getAllCategorie();
 
             $data = array(
                 'view_title' => "Modifier le commentaire de " . $commentaire[Comment::NOM],
@@ -97,8 +97,10 @@ final class CommentaireController extends AbstractController
         }
         elseif ($this->isGet())
         {
+            $article = $this->article->findArticleById($id_article);
             $data = array(
-                'view_title'=> 'Ajouter un commentaire',
+                'view_title' => 'Ajouter un commentaire pour l\'article ' . $article[Article::TITRE],
+                'categories' => $this->categorie->getAllCategorie()
             );
 
             return array('data'=> $data, 'html'=> MainController::getLastViewFileName());
@@ -137,7 +139,7 @@ final class CommentaireController extends AbstractController
 
     public function isIdArticleExist($id_article)
     {
-        if (count($this->article->coutById($id_article) < 1))
+        if ($this->article->countById($id_article) < 1)
         {
             die('L\'id article fourni n\'existe pas dans notre base de donnée');
         }
@@ -147,7 +149,7 @@ final class CommentaireController extends AbstractController
 
     public function isIdCommentaireExist($id_commentaire)
     {
-        if (count($this->comment->countCommentById($id_commentaire)) < 1)
+        if ($this->comment->countCommentById($id_commentaire) < 1)
         {
             die('L\'id commentaire fourni n\'existe pas dans notre base de données');
         }

@@ -15,7 +15,7 @@
                     ID catégorie:
                 </label>
                 <br/>
-                <input id='id_categorie' type="text" name="id_categorie" value="c1"/>
+                <input id='id_categorie' type="text" name="id_categorie" value="catApple"/>
                 <br/>
                 <label for="categorie">
                     Catégorie:
@@ -23,14 +23,12 @@
                 <br/>
                 <input id='categorie' type="text" name="categorie" value="Apple"/>
 
-
-                <input type="hidden" name="c" value="<?php echo MainController::getLastController() ?>"/>
-                <input type="hidden" name="a" value="<?php echo MainController::getLastAction() ?>"/>
-
                 <div class="bouton">
                     <input type="submit" value="Ajouter"/>
                 </div>
             </fieldset>
+            <input type="hidden" name="c" value="<?php echo MainController::getLastController() ?>"/>
+            <input type="hidden" name="a" value="<?php echo MainController::getLastAction() ?>"/>
         </form>
     </div>
 </div>

@@ -11,7 +11,8 @@
 
         <p class="post">
             Poster le <?php echo $view['data']['article'][Article::DATE_PARUTION] ?>
-            par Anna
+            par Anna dans "<a href="<?php echo Url::voirCategorie($view['data']['categorie'][Categorie::ID]); ?>"
+                              title="Voir la catéhorie"><?php echo $view['data']['categorie'][Categorie::ID]; ?></a>"
         </p>
 
         <p>

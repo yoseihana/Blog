@@ -53,13 +53,13 @@
                     <input type="submit" value="Modifier"/>
                 </div>
             </fieldset>
+            <input type="hidden" name="c" value="<?php echo MainController::getLastController() ?>"/>
+            <input type="hidden" name="a" value="<?php echo MainController::getLastAction() ?>"/>
+            <input type="hidden" name="image" value="<?php echo $view['data']['article'][Article::IMAGE] ?>"/>
+            <input type="hidden" name="id_article" value="<?php echo ($view['data']['article'][Article::ID]); ?>"/>
+            <input type="hidden" name="id_categorie2"
+                   value="<?php echo $view['data']['categories'][Categorie::ID] ?>"/>
         </form>
-        <input type="hidden" name="c" value="<?php echo MainController::getLastController() ?>"/>
-        <input type="hidden" name="a" value="<?php echo MainController::getLastAction() ?>"/>
-        <input type="hidden" name="image" value="<?php echo $view['data']['article'][Article::IMAGE] ?>"/>
-        <input type="hidden" name="id_article" value="<?php echo ($view['data']['article'][Article::ID]); ?>"/>
-        <input type="hidden" name="id_categorie2"
-               value="<?php echo $view['data']['categories'][Categorie::ID] ?>"/>
         <? else: ?>
         <p>Vous devez vous connectez pour modifier un article</p>
         <?php endif; ?>

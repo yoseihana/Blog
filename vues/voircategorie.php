@@ -18,8 +18,6 @@
         <a href="<?php echo Url::modifierCategorie($view['data']['categorie'][Categorie::ID]) ?>">Modifier</a>
         -
         <a href="<?php echo Url::supprimerCategorie($view['data']['categorie'][Categorie::ID]) ?>">Supprimer</a>
-        -
-        <a href="<?php echo Url::ajouterCategorie() ?>">Ajouter une catégorie</a>
     </div>
 </div>
 <div class="colonneDroite">

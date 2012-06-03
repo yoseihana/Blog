@@ -13,7 +13,13 @@ class Categorie extends AbstractModel
 
     public function getAll($pagination)
     {
-        $req = 'SELECT * FROM ' . self::TABLE . ' ORDER BY ' . self::TITRE . ' DESC LIMIT ' . $pagination . ',10';
+        $req = 'SELECT * FROM ' . self::TABLE . ' ORDER BY ' . self::TITRE . ' DESC LIMIT ' . $pagination . ',5';
+        return $this->fetchAll($req);
+    }
+
+    public function getAllCategorie()
+    {
+        $req = 'SELECT * FROM ' . self::TABLE . ' ORDER BY ' . self::TITRE;
         return $this->fetchAll($req);
     }
 
@@ -38,7 +44,7 @@ class Categorie extends AbstractModel
             ':id_article'=> $id_article
         );
 
-        return $this->execute($req, $param);
+        return $this->fetch($req, $param);
     }
 
     public function delete($id_categorie)

@@ -23,19 +23,19 @@
                     Texte:
                 </label>
                 <br/>
-                <textarea cols="75" id="texte" name="texte" rows="15">
-
+                <textarea cols="65" id="texte" name="texte" rows="15">
+                    Votre commentaire
                 </textarea>
-
-                <input type="hidden" name="c" value="<?php echo MainController::getLastController() ?>"/>
-                <input type="hidden" name="a" value="<?php echo MainController::getLastAction() ?>"/>
-                <input type="hidden" name="id_article"
-                       value="<?php echo ($view['data']['commentaire'][Comment::ID_ARTICLE]); ?>"/>
 
                 <div class="bouton">
                     <input type="submit" value="Ajouter"/>
                 </div>
             </fieldset>
+            <input type="hidden" name="c" value="<?php echo MainController::getLastController() ?>"/>
+            <input type="hidden" name="a" value="<?php echo MainController::getLastAction() ?>"/>
+            <input type="hidden" name="id_article"
+                   value="<?php echo ($view['data']['commentaire'][Comment::ID_ARTICLE]); ?>"/>
+
         </form>
     </div>
 </div>

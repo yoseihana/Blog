@@ -71,9 +71,9 @@ final class Url
     }
 
     /*---------------COMMENTAIRE--------------*/
-    public static function ajouterCommentaire()
+    public static function ajouterCommentaire($id_article)
     {
-        return Url::build(CommentaireController::getName(), 'ajouter');
+        return Url::build(CommentaireController::getName(), 'ajouter', array('id_article'=> $id_article));
     }
 
     public static function supprimerCommentaire($id_commentaire)

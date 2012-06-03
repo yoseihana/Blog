@@ -26,9 +26,6 @@
                 <a href="<?php echo Url::modifierArticle($article[Article::ID]); ?>">Modifier</a>
                 -
                 <a href="<?php echo Url::supprimerArticle($article[Article::ID]); ?>">Supprimer</a>
-                -
-                <a href="<?php echo Url::ajouterArticle(); ?>">Ajouter
-                    un article</a>
                 <?php endif; ?>
             </div>
             <div class="lecture">
@@ -36,7 +33,7 @@
             </div>
             <div class="comment">
                 <p class="lien">
-                    <a href="<?php echo Url::ajouterCommentaire(); ?>">Poster un commentaire</a>
+                    <a href="<?php echo Url::ajouterCommentaire($article[Article::ID]); ?>">Poster un commentaire</a>
                 </p>
             </div>
         </div>

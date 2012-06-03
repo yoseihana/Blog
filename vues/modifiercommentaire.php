@@ -32,13 +32,14 @@
                     <input type="submit" value="Modifier"/>
                 </div>
             </fieldset>
+            <input type="hidden" name="c" value="<?php echo (MainController::getLastController()); ?>"/>
+            <input type="hidden" name="a" value="<?php echo (MainController::getLastAction()); ?>"/>
+            <input type="hidden" name="id_commentaire"
+                   value="<?php echo ($view['data']['commentaire'][Comment::ID_COMMENTAIRE]); ?>"/>
+            <input type="hidden" name="id_article"
+                   value="<?php echo ($view['data']['commentaire'][Comment::ID_ARTICLE]); ?>"/>
         </form>
-        <input type="hidden" name="c" value="<?php echo (MainController::getLastController()); ?>"/>
-        <input type="hidden" name="a" value="<?php echo (MainController::getLastAction()); ?>"/>
-        <input type="hidden" name="id_commentaire"
-               value="<?php echo ($view['data']['commentaire'][Comment::ID_COMMENTAIRE]); ?>"/>
-        <input type="hidden" name="id_article"
-               value="<?php echo ($view['data']['commentaire'][Comment::ID_ARTICLE]); ?>"/>
+
     </div>
 </div>
 <div class="colonneDroite">

@@ -19,10 +19,10 @@
                 <input type="submit" value="Supprimer"/>
                 <br/>
             </fieldset>
+            <input type="hidden" name="c" value="<?php echo (MainController::getLastController()); ?>"/>
+            <input type="hidden" name="a" value="<?php echo (MainController::getLastAction()); ?>"/>
+            <input type="hidden" name="id_article" value="<?php echo ($view['data']['article'][Article::ID]); ?>"/>
         </form>
-        <input type="hidden" name="c" value="<?php echo (MainController::getLastController()); ?>"/>
-        <input type="hidden" name="a" value="<?php echo (MainController::getLastAction()); ?>"/>
-        <input type="hidden" name="id_article" value="<?php echo ($view['data']['article'][Article::ID]); ?>"/>
     </div>
 </div>
 <div class="colonneDroite">

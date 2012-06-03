@@ -55,7 +55,7 @@ final class ArticleController extends AbstractController
         $data = array(
             'view_title' => 'Tous les articles',
             'articles'   => $this->article->getAll($premiereEntree),
-            'categories' => $this->categorie->getAll(),
+            'categories' => $this->categorie->getAllCategorie(),
             'nbPage'     => $nombrePages
         );
         return array('data'=> $data, 'html'=> MainController::getLastViewFileName());
@@ -70,8 +70,9 @@ final class ArticleController extends AbstractController
         $data = array(
             'view_title'  => $article[Article::TITRE],
             'article'     => $article,
-            'categories'  => $this->categorie->getAll(),
-            'commentaires'=> $this->comment->findCommentByIdArticle($id_article)
+            'categories'  => $this->categorie->getAllCategorie(),
+            'commentaires'=> $this->comment->findCommentByIdArticle($id_article),
+            'categorie'   => $this->categorie->findByArticle($id_article)
         );
 
         return array('data'=> $data, 'html'=> MainController::getLastViewFileName());
@@ -114,7 +115,7 @@ final class ArticleController extends AbstractController
         elseif ($this->isGet())
         {
             $article = $this->article->findArticleById($id_article);
-            $categorie = $this->categorie->getAll();
+            $categorie = $this->categorie->getAllCategorie();
             $data = array(
                 'view_title' => 'Modification de l\'article "' . $article[Article::TITRE],
                 'article'    => $article,
@@ -129,6 +130,7 @@ final class ArticleController extends AbstractController
     {
         if ($this->isPost())
         {
+            DB::getPdoInstance()->beginTransaction();
 
             $article = array(
                 Article::DATE_PARUTION => date('Y-m-d'),
@@ -136,25 +138,23 @@ final class ArticleController extends AbstractController
                 Article::ARTICLE       => $this->getParameter('article'),
                 Article::IMAGE         => NULL
             );
-            var_dump(Article::ID);
+            $new_id_article = $this->article->add($article);
+
             $ecrit = array(
-                Written::ID_ARTICLE   => $this->getParameter('id_article'),
+                Written::ID_ARTICLE   => $new_id_article,
                 Written::ID_CATEGORIE => $this->getParameter('id_categorie')
             );
-
-            DB::getPdoInstance()->beginTransaction();
-            $this->article->add($article);
             $this->written->add($ecrit);
+
             DB::getPdoInstance()->commit();
 
-            //header('Location: ' . Url::voirArticle($this->getParameter('id_article')));
-            header('Location: ' . Url::listerArticle());
+            header('Location: ' . Url::voirArticle($new_id_article));
         }
         elseif ($this->isGet())
         {
             $data = array(
                 'view_title' => 'Ajouter un article',
-                'categories' => $this->categorie->getAll()
+                'categories' => $this->categorie->getAllCategorie(),
             );
 
             return array('data'=> $data, 'html'=> MainController::getLastViewFileName());
@@ -179,7 +179,7 @@ final class ArticleController extends AbstractController
         elseif ($this->isGet())
         {
             $article = $this->article->findArticleById($id_article);
-            $categorie = $this->categorie->getAll();
+            $categorie = $this->categorie->getAllCategorie();
 
             $data = array(
                 'view_title'  => 'Supprimer l\'article: ' . $article[Article::TITRE],
@@ -193,7 +193,7 @@ final class ArticleController extends AbstractController
 
     private function isIdArticleExist($id_article)
     {
-        if ($this->article->coutById($id_article) < 1)
+        if ($this->article->countById($id_article) < 1)
         {
             die('L\'id "' . $id_article . '" n\'existe pas dans la base de données');
         }

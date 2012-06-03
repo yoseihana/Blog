@@ -26,8 +26,9 @@ final class CategorieController extends AbstractController
     function lister()
     {
 
-        $totaleCategories = $this->categorie->countCategorie();
-        $nombrePages = ceil($totaleCategories['total'] / 3);
+
+        $totaleCategorie = $this->categorie->countCategorie();
+        $nombrePages = ceil($totaleCategorie['total'] / 5);
 
         if (isset($_GET['page']))
         {
@@ -43,10 +44,13 @@ final class CategorieController extends AbstractController
             $pageActuelle = 1;
         }
 
-        $premiereEntree = ($pageActuelle - 1) * 3;
-        $data['view_title'] = 'Liste des catégories';
-        $data['categories'] = $this->categorie->getAll($premiereEntree);
-        $data['nbPage'] = $nombrePages;
+        $premiereEntree = ($pageActuelle - 1) * 5;
+
+        $data = array(
+            'view_title' => 'Liste des catégories',
+            'categories' => $this->categorie->getAll($premiereEntree),
+            'nbPage'     => $nombrePages
+        );
 
         return array('data' => $data, 'html' => MainController::getLastViewFileName());
     }
@@ -80,8 +84,9 @@ final class CategorieController extends AbstractController
             $categorie = $this->categorie->findCategorieById($id_categorie);
 
             $data = array(
-                'view_title'=> 'Modification de la catégorie ' . $categorie[Categorie::TITRE],
-                'categorie' => $categorie,
+                'view_title' => 'Modification de la catégorie ' . $categorie[Categorie::TITRE],
+                'categorie'  => $categorie,
+                'categories' => $this->categorie->getAllCategorie()
             );
 
             return array('data'=> $data, 'html'=> MainController::getLastViewFileName());
@@ -103,7 +108,7 @@ final class CategorieController extends AbstractController
         }
         elseif ($this->isGet())
         {
-            $categorie = $this->categorie->getAll();
+            $categorie = $this->categorie->getAllCategorie();
             $data = array(
                 'view_title'=> 'Ajouter une catégorie',
                 'categories'=> $categorie
@@ -133,7 +138,7 @@ final class CategorieController extends AbstractController
             $data = array(
                 'view_title'=> 'Supprimer la catégorie: ' . $categorie[Categorie::TITRE],
                 'categorie' => $categorie,
-                'categories'=> $this->categorie->getAll()
+                'categories'=> $this->categorie->getAllCategorie()
             );
 
             return array('data'=> $data, 'html'=> MainController::getLastViewFileName());
@@ -146,7 +151,7 @@ final class CategorieController extends AbstractController
         $this->isIdExist($id_categorie);
 
         $categorie = $this->categorie->findCategorieById($id_categorie);
-        $categories = $this->categorie->getAll();
+        $categories = $this->categorie->getAllCategorie();
 
         $data = array(
             'view_title'  => 'Catégorie ' . $categorie[Categorie::TITRE],

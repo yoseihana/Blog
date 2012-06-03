@@ -8,9 +8,6 @@
         <a href="<?php echo Url::modifierCategorie($categorie[Categorie::ID]) ?>">Modifier</a>
         -
         <a href="<?php echo Url::supprimerCategorie($categorie[Categorie::ID]) ?>">Supprimer</a>
-        -
-        <a href="<?php echo Url::ajouterCategorie() ?>">Ajouter une catégorie</a>
-
         </div>
          <?php endif; ?>
     <?php endforeach; ?>

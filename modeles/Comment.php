@@ -54,7 +54,7 @@ class Comment extends AbstractModel
 
     public function deleteByArticle($id_article)
     {
-        $req = 'DELET FROM ' . self::TABLE . ' WHERE ' . self::ID_ARTICLE . ' = :id_article';
+        $req = 'DELETE FROM ' . self::TABLE . ' WHERE ' . self::ID_ARTICLE . ' = :id_article';
         $param = array(
             ':id_article' => $id_article
         );

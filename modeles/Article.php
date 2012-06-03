@@ -30,6 +30,12 @@ class Article extends AbstractModel
         return $this->fetchAll($req);
     }
 
+    public function getAllArticle()
+    {
+        $req = 'SELECT * FROM ' . self::TABLE . ' ORDER BY ' . self::DATE_PARUTION;
+
+        return $this->fetchAll($req);
+    }
 
     /**
      * Récupère un article selon son ID
@@ -125,7 +131,7 @@ class Article extends AbstractModel
     /**
      * Ajout d'un article
      * @param array $data
-     * @return bool
+     * @return string
      */
     public function add(array $data)
     {
@@ -137,9 +143,8 @@ class Article extends AbstractModel
             ':image'        => $data[self::IMAGE],
         );
 
-
-        return $this->execute($req, $param);
-
+        $this->execute($req, $param);
+        return $this->connection->lastInsertId();
     }
 
     /**
@@ -147,9 +152,9 @@ class Article extends AbstractModel
      * @param $id_article
      * @return mixed
      */
-    public function coutById($id_article)
+    public function countById($id_article)
     {
-        $req = 'SELECT count(' . self::ID . ') AS nb_id_article FROM ' . self::ARTICLE . ' WHERE ' . self::ID . '= :id_article'; // récupère le nbre d'isbn
+        $req = 'SELECT count(' . self::ID . ') AS nb_id_article FROM ' . self::TABLE . ' WHERE ' . self::ID . '= :id_article'; // récupère le nbre d'isbn
         $param = Array(
             ':id_article' => $id_article
         );

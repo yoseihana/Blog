@@ -76,7 +76,6 @@ final class Written extends AbstractModel
         $param = array(
             ':id_categorie' => $data[self::ID_CATEGORIE]
         );
-        var_dump($id_categorie);
         return $this->execute($req, $param);
     }
 }

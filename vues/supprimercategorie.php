@@ -18,16 +18,14 @@
 
                 <p> <?php echo ($view['data']['categorie'][Categorie::TITRE]); ?> </p>
 
-
-                <input type="hidden" name="c" value="<?php echo (MainController::getLastController()); ?>"/>
-                <input type="hidden" name="a" value="<?php echo (MainController::getLastAction()); ?>"/>
-                <input type="hidden" name="id_categorie"
-                       value="<?php echo ($view['data']['categorie'][Categorie::ID]); ?>"/>
-
                 <div class="bouton">
                     <input type="submit" value="Supprimer"/>
                 </div>
             </fieldset>
+            <input type="hidden" name="c" value="<?php echo (MainController::getLastController()); ?>"/>
+            <input type="hidden" name="a" value="<?php echo (MainController::getLastAction()); ?>"/>
+            <input type="hidden" name="id_categorie"
+                   value="<?php echo ($view['data']['categorie'][Categorie::ID]); ?>"/>
         </form>
     </div>
 </div>
