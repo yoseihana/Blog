@@ -20,6 +20,8 @@ final class ArticleController extends AbstractController
 
     function __construct()
     {
+        global $imgUploader;
+        global $imgResizer;
         $this->article = new Article();
         $this->categorie = new Categorie();
         $this->comment = new Comment();
@@ -34,7 +36,7 @@ final class ArticleController extends AbstractController
     public function lister()
     {
         $totaleArticles = $this->article->countArticle();
-        $nombrePages = ceil($totaleArticles['total'] / 10);
+        $nombrePages = ceil($totaleArticles['total'] / 5);
 
         if (isset($_GET['page']))
         {
@@ -50,7 +52,7 @@ final class ArticleController extends AbstractController
             $pageActuelle = 1;
         }
 
-        $premiereEntree = ($pageActuelle - 1) * 10;
+        $premiereEntree = ($pageActuelle - 1) * 5;
 
         $data = array(
             'view_title' => 'Tous les articles',
@@ -84,14 +86,17 @@ final class ArticleController extends AbstractController
         $id_article = $this->getParameter('id_article');
         $this->isIdArticleExist($id_article);
 
+        global $imgUploader;
+        global $imgResizer;
+
         if ($this->isPost())
         {
             $article = array(
+                Article::ID           => $this->getParameter('id_article'),
                 Article::TITRE        => $this->getParameter('titre'),
                 Article::ARTICLE      => $this->getParameter('article'),
                 Article::DATE_PARUTION=> date('Y-m-d'),
-                Article::IMAGE        => NULL,
-                Article::ID           => $this->getParameter('id_article')
+                Article::IMAGE        => $this->uploadImg('fichier', $this->getParameter('image'))
             );
 
             $ecritDelete = array(
@@ -120,6 +125,7 @@ final class ArticleController extends AbstractController
             $data = array(
                 'view_title' => 'Modification de l\'article "' . $article[Article::TITRE],
                 'article'    => $article,
+                'categorie'  => $this->categorie->findByArticle($id_article),
                 'categories' => $categorie
             );
 
@@ -137,7 +143,7 @@ final class ArticleController extends AbstractController
                 Article::DATE_PARUTION => date('Y-m-d'),
                 Article::TITRE         => $this->getParameter('titre'),
                 Article::ARTICLE       => $this->getParameter('article'),
-                Article::IMAGE         => NULL
+                Article::IMAGE         => $this->uploadImg('fichier', NULL)
             );
             $new_id_article = $this->article->add($article);
 
@@ -196,10 +202,42 @@ final class ArticleController extends AbstractController
         if ($this->article->countById($id_article) < 1)
         {
             Erreur::erreurId();
-            //die('L\'id "' . $id_article . '" n\'existe pas dans la base de données');
         }
 
         return true;
+    }
+
+    public function uploadImg($file, $defautValue = NULL)
+    {
+        global $imgUploader, $imgResizer;
+
+        if ($imgUploader->getErrorCode($file) == UPLOAD_ERR_NO_FILE)
+        {
+            return $defautValue;
+        }
+
+        if (!$imgUploader->isFileExists($file))
+        {
+            Erreur::erreurFichier();
+        }
+
+        if (!$imgUploader->isValidExtension($file))
+        {
+            Erreur::erreurExtention();
+        }
+
+        if (!$imgUploader->isValidFileSize($file))
+        {
+            Erreur::erreurTaille();
+        }
+
+        $return = $imgResizer->resizeImage($_FILES[$file]['tmp_name'], 'f' . rand(0, 100) . time());
+        if (!$return)
+        {
+            Erreur::erreurChargement();
+        }
+
+        return $return;
     }
 }
 

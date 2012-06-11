@@ -18,6 +18,8 @@
         <p>
             <?php echo $view['data']['article'][Article::ARTICLE] ?>
         </p>
+        <?php if (isset($view['data']['article'][Article::IMAGE])): ?><img
+        src="./vues/img/<?php echo $view['data']['article'][Article::IMAGE] ?>" alt="image"/> <?php endif; ?>
         <?php if (MainController::isAuthenticated()): ?>
         <div class="lien">
             <a href="<?php echo Url::modifierArticle($view['data']['article'][Article::ID]) ?>">Modifier</a>

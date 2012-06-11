@@ -24,7 +24,7 @@
                 <input id='mdp' type="text" name="mdp" value=""/>
 
                 <div class="bouton">
-                    <input type="submit" value="Ajouter"/>
+                    <input type="submit" value="Se connecter"/>
                 </div>
             </fieldset>
             <input type="hidden" name="c" value="<?php echo MainController::getLastController() ?>"/>

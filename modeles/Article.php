@@ -29,7 +29,7 @@ class Article extends AbstractModel
             ' AS a LEFT JOIN ' . Comment::TABLE .
             ' AS c ON a.' . self::ID . ' = c.' . Comment::ID_ARTICLE .
             ' GROUP BY a.' . self::ID .
-            ' DESC LIMIT ' . $pagination . ',10';
+            ' DESC LIMIT ' . $pagination . ',5';
 
         return $this->fetchAll($req);
     }

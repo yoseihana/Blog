@@ -4,7 +4,7 @@
             <?php echo $view['data']['view_title']; ?>
         </h1>
 
-        <form action="<?php echo ($_SERVER['PHP_SELF']) ?>" method="post">
+        <form action="<?php echo ($_SERVER['PHP_SELF']) ?>" method="post" enctype="multipart/form-data">
             <fieldset>
                 <div class="comment">
                     <p class="lien">
@@ -33,11 +33,10 @@
                     Catégorie :
                 </label>
                 <br/>
-
                 <select name="id_categorie" id="categorie">
                     <?php foreach ($view['data']['categories'] as $categorie): ?>
-                    <option <?php if ($categorie[Categorie::ID] == $categorie[Categorie::ID]): ?>selected="selected"<?php endif;?>
-                        value="<?php echo $categorie[Categorie::ID]; ?>"><?php echo $categorie[Categorie::TITRE] ?></option>
+                    <option <?php if ($view['data']['categorie'][Categorie::ID] == $categorie[Categorie::ID]): ?>selected="selected"<?php endif;?>
+                        value="<?php echo $categorie[Categorie::ID]; ?>"><?php echo $categorie[Categorie::TITRE];?></option>
                     <?php endforeach; ?>
                 </select>
                 <br/>
@@ -45,7 +44,8 @@
                     Ajouter une image
                 </label>
                 <br/>
-                <img id='modifierImg' src="./img/<?php echo $view['data']['article'][Article::IMAGE] ?>" alt="image"/>
+                <?php if (isset($view['data']['article'][Article::IMAGE])): ?><img
+                    src="./vues/img/<?php echo $view['data']['article'][Article::IMAGE] ?>" alt="image"/><?php endif; ?>
                 <br/>
                 <input type="file" name="fichier" id="fichier"/>
 
