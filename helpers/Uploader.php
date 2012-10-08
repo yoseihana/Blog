@@ -1,11 +1,5 @@
 <?php
-/**
- * Created by JetBrains PhpStorm.
- * User: annabelle
- * Date: 11/06/12
- * Time: 17:06
- * To change this template use File | Settings | File Templates.
- */
+
 final class Uploader
 {
     private $destinationFolder;
@@ -67,6 +61,7 @@ final class Uploader
         {
             return false;
         }
+
         return filesize($_FILES[$file]['tmp_name']) <= $this->maximumFileSize;
     }
 

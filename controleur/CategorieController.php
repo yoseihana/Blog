@@ -160,7 +160,6 @@ final class CategorieController extends AbstractController
     {
         if ($this->categorie->countById($id_categorie) < 1)
         {
-            //die('L\'id catégorie fourni n\'existe pas dans la base de données');
             Erreur::erreurId();
         }
 

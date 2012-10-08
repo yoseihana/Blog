@@ -18,7 +18,7 @@
             </p>
 
             <p>
-                <?php echo $article['article'] ?>
+                <?php echo substr($article['article'], 0, 200).'...'; ?>
             </p>
 
             <div class="lien">

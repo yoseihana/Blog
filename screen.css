@@ -304,9 +304,9 @@ div.article ul {
 
 div.article li {
     list-style: disc;
-    margin-left: 1em;
+    margin:1em 0 0 1em;
 }
 
-quote {
-
+div.article img{
+    margin-top: 1em;
 }

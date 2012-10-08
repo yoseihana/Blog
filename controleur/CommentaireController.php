@@ -71,7 +71,6 @@ final class CommentaireController extends AbstractController
         if ($this->article->countById($id_article) < 1)
         {
             Erreur::erreurId();
-            //die('L\'id article fourni n\'existe pas dans notre base de donnée');
         }
 
         return true;
@@ -82,7 +81,6 @@ final class CommentaireController extends AbstractController
         if ($this->comment->countCommentById($id_commentaire) < 1)
         {
             Erreur::erreurId();
-            //die('L\'id commentaire fourni n\'existe pas dans notre base de données');
         }
         return true;
     }

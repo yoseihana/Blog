@@ -86,9 +86,6 @@ final class ArticleController extends AbstractController
         $id_article = $this->getParameter('id_article');
         $this->isIdArticleExist($id_article);
 
-        global $imgUploader;
-        global $imgResizer;
-
         if ($this->isPost())
         {
             $article = array(

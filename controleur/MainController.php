@@ -41,7 +41,6 @@ abstract class MainController
         if (!class_exists($lastControllerClass, false))
         {
             Erreur::erreurControllerExiste();
-            //die('Aucun controller existe pour "' . self::$lastController . '".');
         }
 
         //Changement, passe d'un string à un objet instancier de la dernière classe
@@ -51,7 +50,6 @@ abstract class MainController
         if (!($lastControllerClass instanceof AbstractController))
         {
             Erreur::erreurController();
-            //die('Pas de controller valide pour "' . self::$lastController . '".');
         }
 
         // Retrieve all valid action for the given controller
@@ -64,7 +62,6 @@ abstract class MainController
         if (!in_array(self::getLastAction(), $availableActions))
         {
             Erreur::erreurAction();
-            //die ('Pas d\'action "' . self::$lastAction . '" pour le controller "' . self::$lastController . '"');
         }
 
         // Call the requested method from the requested controller  /!\ Trés important!
